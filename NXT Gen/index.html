@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="app-html">
+<head>
+   <link rel="manifest" href='data:application/manifest+json,{"name":"NXT Gen Tennis Academy","short_name":"NXT Gen","start_url":"/","display":"standalone","background_color":"#0b0f19","theme_color":"#10b981","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/33/33736.png","sizes":"512x512","type":"image/png"}]}'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NXT Gen. Tennis Academy | أكاديمية التنس والبادل</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cairo & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        tennis: '#CCFF00',
+                        emeraldNeon: '#10B981',
+                        blueNeon: '#3B82F6',
+                        darkBg: '#05070D',
+                        cardBg: 'rgba(255, 255, 255, 0.04)',
+                        cardBorder: 'rgba(255, 255, 255, 0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: radial-gradient(circle at 50% 0%, #0d1424 0%, #03050a 100%);
+            color: #F3F4F6;
+            min-height: 100vh;
+        }
+        [dir="ltr"] body {
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.045);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 25px 60px rgba(16, 185, 129, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+        .glass-nav {
+            background: rgba(5, 8, 16, 0.85);
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glow-tennis {
+            box-shadow: 0 0 30px rgba(204, 255, 0, 0.4);
+        }
+        .glow-emerald {
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
+        }
+        .glow-blue {
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.4);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(16, 185, 129, 0.6);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-0 sm:p-4">
+
+    <!-- Mobile App Container (3D Framed View) -->
+    <div class="w-full sm:max-w-md h-screen sm:h-[920px] sm:rounded-[48px] bg-[#05070D] sm:border-[5px] sm:border-white/10 flex flex-col relative overflow-hidden shadow-2xl">
+        
+        <!-- Top Header Bar -->
+        <header class="px-5 pt-6 pb-4 flex items-center justify-between z-30 glass-nav rounded-b-[32px]">
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-tennis flex items-center justify-center text-gray-950 font-black text-xl shadow-lg glow-tennis">
+                    <i class="fa-solid fa-table-tennis-paddle-ball"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-sm tracking-wide text-white">NXT Gen. Academy</h1>
+                    <p class="text-[10px] text-emerald-400 font-bold tracking-wider" data-i18n="sub-title">أكاديمية التنس والبادل</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <!-- Sync Status Indicator -->
+                <button onclick="openModal('sync-modal')" title="Google Sheets Sync" class="w-9 h-9 rounded-xl glass-card flex items-center justify-center text-emerald-400 hover:text-white transition relative">
+                    <i class="fa-solid fa-cloud-arrow-down text-xs"></i>
+                    <span id="sync-dot" class="absolute top-2 right-2 w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+                </button>
+                <!-- Language Toggle Button -->
+                <button onclick="toggleLanguage()" class="px-3 py-1.5 rounded-xl glass-card text-xs font-bold text-tennis hover:bg-white/10 transition flex items-center gap-1.5 border border-tennis/30">
+                    <i class="fa-solid fa-globe text-[11px]"></i>
+                    <span id="lang-label">EN</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Scrollable Content Area -->
+        <main id="app-content" class="flex-1 overflow-y-auto px-5 py-6 pb-36 space-y-5">
+            
+            <!-- ==================== TAB 0: DASHBOARD (الرئيسية) ==================== -->
+            <section id="tab-dashboard" class="space-y-4">
+                <!-- Welcome Banner -->
+                <div class="glass-card p-6 rounded-[28px] relative overflow-hidden bg-gradient-to-br from-emerald-950/70 via-transparent to-tennis/10 border border-emerald-500/25">
+                    <div class="absolute -top-12 -right-12 w-36 h-36 bg-emerald-500/20 rounded-full blur-3xl"></div>
+                    <span class="text-[10px] font-extrabold px-3 py-1 rounded-full bg-tennis/20 text-tennis uppercase tracking-widest border border-tennis/30" data-i18n="badge-season">موسم التدريب 2026</span>
+                    <h2 class="text-xl font-black text-white mt-3" data-i18n="welcome-title">مرحباً بك في أكاديمية النخبة</h2>
+                    <p class="text-xs text-gray-300 mt-1.5 leading-relaxed" data-i18n="welcome-desc">نظام إدارة احترافي متزامن مع Google Sheets. استعرض الفرق، مواعيد التدريب، اللاعبين، والمحتوى التعليمي.</p>
+                    
+                    <div class="grid grid-cols-3 gap-2.5 mt-5 pt-4 border-t border-white/10 text-center">
+                        <div class="glass-card p-2.5 rounded-2xl">
+                            <span class="block text-base font-black text-tennis" id="dash-player-count">15+</span>
+                            <span class="text-[10px] text-gray-400 font-semibold" data-i18n="stat-players">لاعب بطل</span>
+                        </div>
+                        <div class="glass-card p-2.5 rounded-2xl">
+                            <span class="block text-base font-black text-emerald-400">4</span>
+                            <span class="text-[10px] text-gray-400 font-semibold" data-i18n="stat-teams">فرق متخصصة</span>
+                        </div>
+                        <div class="glass-card p-2.5 rounded-2xl">
+                            <span class="block text-base font-black text-blue-400">100%</span>
+                            <span class="text-[10px] text-gray-400 font-semibold" data-i18n="stat-sync">متزامن حياً</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Action Grid (5 Sections Access) -->
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="switchTab('teams')" class="glass-card p-4 rounded-2xl text-start hover:border-emerald-500/50 group transition">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-3 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-people-group text-base"></i>
+                        </div>
+                        <h4 class="text-sm font-bold text-white" data-i18n="nav-teams">الفرق</h4>
+                        <p class="text-[10px] text-gray-400 mt-0.5" data-i18n="card-teams-sub">المجموعات والفئات العمرية</p>
+                    </button>
+
+                    <button onclick="switchTab('players')" class="glass-card p-4 rounded-2xl text-start hover:border-tennis/50 group transition">
+                        <div class="w-10 h-10 rounded-xl bg-tennis/20 text-tennis flex items-center justify-center mb-3 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-users text-base"></i>
+                        </div>
+                        <h4 class="text-sm font-bold text-white" data-i18n="nav-players">اللاعبون</h4>
+                        <p class="text-[10px] text-gray-400 mt-0.5" data-i18n="card-players-sub">قاعدة بيانات اللاعبين</p>
+                    </button>
+
+                    <button onclick="switchTab('schedules')" class="glass-card p-4 rounded-2xl text-start hover:border-blue-500/50 group transition">
+                        <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center mb-3 group-hover:scale-110 transition">
+                            <i class="fa-regular fa-calendar-days text-base"></i>
+                        </div>
+                        <h4 class="text-sm font-bold text-white" data-i18n="nav-schedules">الجداول والمواعيد</h4>
+                        <p class="text-[10px] text-gray-400 mt-0.5" data-i18n="card-schedules-sub">مواعيد الحصص والملاعب</p>
+                    </button>
+
+                    <button onclick="switchTab('education')" class="glass-card p-4 rounded-2xl text-start hover:border-purple-500/50 group transition">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-3 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-graduation-cap text-base"></i>
+                        </div>
+                        <h4 class="text-sm font-bold text-white" data-i18n="nav-education">المحتوى التعليمي</h4>
+                        <p class="text-[10px] text-gray-400 mt-0.5" data-i18n="card-education-sub">فيديوهات ودروس تكتيكية</p>
+                    </button>
+                </div>
+
+                <!-- Registration & Admin Card -->
+                <div class="glass-card p-4 rounded-2xl flex items-center justify-between border border-tennis/30 bg-gradient-to-r from-tennis/10 to-transparent">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-2xl bg-tennis/20 text-tennis flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-user-plus text-base"></i>
+                        </div>
+                        <div>
+                            <h5 class="text-xs font-bold text-white" data-i18n="dash-reg-title">تسجيل لاعب جديد والإدارة</h5>
+                            <p class="text-[11px] text-gray-300" data-i18n="dash-reg-desc">استمارة مباشرة مرتبطة بملف Google Sheets</p>
+                        </div>
+                    </div>
+                    <button onclick="switchTab('admin')" class="px-3.5 py-2 rounded-xl bg-tennis text-gray-950 font-black text-xs shadow-lg glow-tennis hover:opacity-90 transition">
+                        <span data-i18n="open">فتح</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- ==================== TAB 1: TEAMS (الفرق) ==================== -->
+            <section id="tab-teams" class="hidden space-y-4">
+                <div class="flex justify-between items-center mb-1">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-white" data-i18n="teams-heading">فرق الأكاديمية والمجموعات</h2>
+                        <p class="text-xs text-gray-400" data-i18n="teams-sub">مستوردة مباشرة من ورقة عمل Teams في الشيت</p>
+                    </div>
+                    <span class="text-xs bg-emerald-500/15 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/30 font-bold">4 فرق</span>
+                </div>
+
+                <div id="teams-container" class="space-y-3.5">
+                    <!-- Populated dynamically -->
+                </div>
+            </section>
+
+            <!-- ==================== TAB 2: PLAYERS (اللاعبون) ==================== -->
+            <section id="tab-players" class="hidden space-y-4">
+                <div class="flex justify-between items-center mb-1">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-white" data-i18n="players-heading">قاعدة بيانات اللاعبين والأبطال</h2>
+                        <p class="text-xs text-gray-400" data-i18n="players-sub">مستوردة مباشرة من ورقة عمل Players في الشيت</p>
+                    </div>
+                    <span class="text-xs bg-tennis/15 text-tennis px-3 py-1 rounded-full border border-tennis/30 font-bold" id="player-count-badge">5 أبطال</span>
+                </div>
+
+                <!-- Search Input -->
+                <div class="relative">
+                    <span class="absolute inset-y-0 right-3 flex items-center pr-2 text-gray-400">
+                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                    </span>
+                    <input type="text" id="player-search" oninput="filterPlayers()" placeholder="بحث باسم اللاعب أو ولي الأمر..." class="w-full bg-white/5 border border-white/10 rounded-2xl py-2.5 pr-10 pl-4 text-xs text-white placeholder-gray-400 focus:outline-none focus:border-emerald-400 transition" data-i18n-placeholder="search-placeholder">
+                </div>
+
+                <!-- Players Dynamic Container -->
+                <div id="players-list-container" class="space-y-3.5">
+                    <!-- Populated via JavaScript -->
+                </div>
+            </section>
+
+            <!-- ==================== TAB 3: SCHEDULES (الجداول والمواعيد) ==================== -->
+            <section id="tab-schedules" class="hidden space-y-4">
+                <div class="flex justify-between items-center mb-1">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-white" data-i18n="schedules-heading">جداول التدريبات والمواعيد</h2>
+                        <p class="text-xs text-gray-400" data-i18n="schedules-sub">مستوردة مباشرة من ورقة عمل Schedules</p>
+                    </div>
+                    <span class="text-xs bg-blue-500/15 text-blue-400 px-3 py-1 rounded-full border border-blue-500/30 font-bold">2026</span>
+                </div>
+
+                <div id="schedules-container" class="space-y-3.5">
+                    <!-- Populated dynamically -->
+                </div>
+            </section>
+
+            <!-- ==================== TAB 4: EDUCATIONAL CONTENT (المحتوى التعليمي) ==================== -->
+            <section id="tab-education" class="hidden space-y-4">
+                <div class="flex justify-between items-center mb-1">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-white" data-i18n="education-heading">المحتوى التعليمي والفيديوهات</h2>
+                        <p class="text-xs text-gray-400" data-i18n="education-sub">مستوردة من ورقة عمل Educational_Content</p>
+                    </div>
+                    <span class="text-xs bg-purple-500/15 text-purple-400 px-3 py-1 rounded-full border border-purple-500/30 font-bold">Pro</span>
+                </div>
+
+                <div id="education-container" class="space-y-3.5">
+                    <!-- Populated dynamically -->
+                </div>
+            </section>
+
+            <!-- ==================== TAB 5: ADMINISTRATION & REGISTRATION (الإدارة والتسجيل) ==================== -->
+            <section id="tab-admin" class="hidden space-y-4">
+                <div class="flex justify-between items-center mb-1">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-white" data-i18n="admin-heading">الإدارة واستمارة التسجيل</h2>
+                        <p class="text-xs text-gray-400" data-i18n="admin-sub">بيانات الإدارة والتسجيل المتصل بـ Google Sheets</p>
+                    </div>
+                    <span class="text-xs bg-emerald-500/15 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/30 font-bold">24/7</span>
+                </div>
+
+                <!-- Admin Contacts List -->
+                <div class="space-y-3" id="admin-container">
+                    <!-- Populated dynamically -->
+                </div>
+
+                <!-- Registration Form Card -->
+                <div class="glass-card p-5 rounded-3xl relative overflow-hidden mt-6 border border-tennis/30">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-black text-white flex items-center gap-2">
+                            <i class="fa-solid fa-user-plus text-tennis"></i> <span data-i18n="form-main-title">استمارة تسجيل لاعب جديد</span>
+                        </h3>
+                        <span class="text-[10px] bg-tennis/20 text-tennis px-2.5 py-0.5 rounded-full font-bold">Google Sheets Sync</span>
+                    </div>
+
+                    <form id="new-reg-form" onsubmit="handleRegistrationSubmit(event)" class="space-y-3.5">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-200 mb-1"><span data-i18n="form-child-name">اسم اللاعب / الطفل الرباعي</span> <span class="text-tennis">*</span></label>
+                            <input type="text" id="reg-child-name" required placeholder="مثال: يوسف أحمد محمد" class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-emerald-400 transition" data-i18n-placeholder="form-child-placeholder">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-200 mb-1"><span data-i18n="form-age">سن اللاعب</span> <span class="text-tennis">*</span></label>
+                                <input type="number" id="reg-child-age" required min="4" max="20" placeholder="مثال: 11" class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-emerald-400 transition" data-i18n-placeholder="form-age-placeholder">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-200 mb-1"><span data-i18n="form-sport">الرياضة المختارة</span> <span class="text-tennis">*</span></label>
+                                <select id="reg-sport" class="w-full bg-[#0d1322] border border-white/15 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-400 transition">
+                                    <option value="تنس أرضي">تنس أرضي (Tennis)</option>
+                                    <option value="بادل">بادل (Padel)</option>
+                                    <option value="التنس والبادل">التنس والبادل معاً</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-200 mb-1"><span data-i18n="form-parent-name">اسم ولي الأمر الكريم</span> <span class="text-tennis">*</span></label>
+                            <input type="text" id="reg-parent-name" required placeholder="مثال: أ. أحمد محمد" class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-emerald-400 transition" data-i18n-placeholder="form-parent-placeholder">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-200 mb-1"><span data-i18n="form-phone">رقم الهاتف (واتساب)</span> <span class="text-tennis">*</span></label>
+                            <input type="tel" id="reg-phone" required placeholder="01012345678" class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-emerald-400 transition" data-i18n-placeholder="form-phone-placeholder">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-200 mb-1" data-i18n="form-notes">ملاحظات أو مستوى اللاعب السابق</label>
+                            <textarea id="reg-notes" rows="2" placeholder="هل لديه خبرة أو إصابات؟" class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-emerald-400 transition resize-none" data-i18n-placeholder="form-notes-placeholder"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-3.5 mt-2 rounded-xl bg-gradient-to-r from-emerald-500 to-tennis text-gray-950 font-extrabold text-xs shadow-lg glow-tennis flex items-center justify-center gap-2 hover:opacity-95 transition">
+                            <i class="fa-solid fa-paper-plane"></i> <span data-i18n="form-submit-btn">إرسال الطلب وحفظه في Google Sheets</span>
+                        </button>
+                    </form>
+
+                    <!-- Success State -->
+                    <div id="reg-success-box" class="hidden flex flex-col items-center text-center py-8 space-y-3">
+                        <div class="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-3xl glow-emerald animate-bounce">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-white" data-i18n="success-title">تم إرسال الطلب وحفظه في الشيت بنجاح!</h3>
+                        <p class="text-xs text-gray-300 leading-relaxed max-w-xs" data-i18n="success-desc">تم إضافة بيانات اللاعب في جدول Google Sheets فورياً وإشعار إدارة الأكاديمية.</p>
+                        <button onclick="resetRegistrationForm()" class="mt-4 px-6 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs text-white font-semibold transition" data-i18n="success-btn">
+                            تسجيل لاعب آخر
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- ==================== BOTTOM NAVIGATION BAR (3D Glassmorphism) ==================== -->
+        <nav class="absolute bottom-0 left-0 right-0 h-20 glass-nav px-2 flex items-center justify-around z-30 rounded-t-[32px] shadow-2xl">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex flex-col items-center justify-center w-12 py-1 text-emerald-400 transition group">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center bg-emerald-500/20 text-emerald-400 transition-all duration-300 shadow-md">
+                    <i class="fa-solid fa-house text-xs"></i>
+                </div>
+                <span class="text-[9px] font-extrabold mt-1" data-i18n="nav-home">الرئيسية</span>
+            </button>
+            <button onclick="switchTab('teams')" id="nav-teams" class="flex flex-col items-center justify-center w-12 py-1 text-gray-400 hover:text-white transition group">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center bg-transparent group-hover:bg-white/10 transition-all duration-300">
+                    <i class="fa-solid fa-people-group text-xs"></i>
+                </div>
+                <span class="text-[9px] font-medium mt-1" data-i18n="nav-teams">الفرق</span>
+            </button>
+            <button onclick="switchTab('players')" id="nav-players" class="flex flex-col items-center justify-center w-12 py-1 text-gray-400 hover:text-white transition group">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center bg-transparent group-hover:bg-white/10 transition-all duration-300">
+                    <i class="fa-solid fa-users text-xs"></i>
+                </div>
+                <span class="text-[9px] font-medium mt-1" data-i18n="nav-players">اللاعبون</span>
+            </button>
+            <button onclick="switchTab('schedules')" id="nav-schedules" class="flex flex-col items-center justify-center w-12 py-1 text-gray-400 hover:text-white transition group">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center bg-transparent group-hover:bg-white/10 transition-all duration-300">
+                    <i class="fa-regular fa-calendar-days text-xs"></i>
+                </div>
+                <span class="text-[9px] font-medium mt-1" data-i18n="nav-schedules">المواعيد</span>
+            </button>
+            <button onclick="switchTab('education')" id="nav-education" class="flex flex-col items-center justify-center w-12 py-1 text-gray-400 hover:text-white transition group">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center bg-transparent group-hover:bg-white/10 transition-all duration-300">
+                    <i class="fa-solid fa-graduation-cap text-xs"></i>
+                </div>
+                <span class="text-[9px] font-medium mt-1" data-i18n="nav-education">التعليم</span>
+            </button>
+            <button onclick="switchTab('admin')" id="nav-admin" class="flex flex-col items-center justify-center w-12 py-1 text-gray-400 hover:text-white transition group">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center bg-transparent group-hover:bg-white/10 transition-all duration-300">
+                    <i class="fa-solid fa-headset text-xs"></i>
+                </div>
+                <span class="text-[9px] font-medium mt-1" data-i18n="nav-admin">الإدارة</span>
+            </button>
+        </nav>
+
+        <!-- ==================== GOOGLE SHEETS SYNC & SETUP GUIDE MODAL ==================== -->
+        <div id="sync-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+            <div class="glass-card w-full max-w-sm p-6 rounded-3xl border border-emerald-500/30 relative shadow-2xl max-h-[85vh] overflow-y-auto">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-sm font-extrabold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-cloud-arrow-down text-emerald-400"></i> <span data-i18n="modal-sync-title">ربط Google Sheets وشرح التشغيل</span>
+                    </h3>
+                    <button onclick="closeModal('sync-modal')" class="w-8 h-8 rounded-full bg-white/10 text-gray-300 hover:text-white flex items-center justify-center transition">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="space-y-4 text-xs text-gray-300 leading-relaxed">
+                    <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10">
+                        <strong class="text-tennis block mb-1">1. مصدر البيانات الأساسي (Google Sheets)</strong>
+                        <p class="text-[11px]" data-i18n="guide-p1">التطبيق مرتبط بقاعدة بيانات الشيت الخاص بك: <code class="text-emerald-300 text-[10px] break-all">1kdjFSDOdrLN5mPMPb8UbMFnng7RhcfdotjUMfstRdRM</code>. أي تعديل يتم في جداول (Players, Teams, Schedules, Educational_Content) ينعكس مباشرة على التطبيق.</p>
+                    </div>
+
+                    <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10">
+                        <strong class="text-emerald-400 block mb-1">2. كيفية تشغيل التطبيق مجاناً (Hosting)</strong>
+                        <p class="text-[11px]" data-i18n="guide-p2">قم بحفظ هذا الملف (`index.html`)، ثم ارفعه مجاناً على <a href="https://app.netlify.com" target="_blank" class="text-tennis underline">Netlify</a> أو <a href="https://github.com" target="_blank" class="text-tennis underline">GitHub Pages</a> لتحصل على رابط ويب فوري.</p>
+                    </div>
+
+                    <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10">
+                        <strong class="text-blue-400 block mb-1">3. تحويل التطبيق إلى ملف APK</strong>
+                        <p class="text-[11px]" data-i18n="guide-p3">خذ رابط موقعك وادخل على موقع <a href="https://www.pwabuilder.com" target="_blank" class="text-blue-300 underline">PWABuilder.com</a> المجاني التابع لـ Microsoft لتحويل التطبيق إلى ملف APK وثبته على الأندرويد بكل سهولة.</p>
+                    </div>
+                </div>
+
+                <button onclick="closeModal('sync-modal')" class="w-full mt-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-tennis text-gray-950 font-bold text-xs shadow-lg">
+                    <span data-i18n="close-btn">فهمت، العودة للتطبيق</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ==================== JAVASCRIPT APPLICATION LOGIC ==================== -->
+    <script>
+        // Database mirroring the exact Google Sheet structure
+        let academyData = {
+            teams: [
+                { name_ar: "فريق نخب التنس (أ)", name_en: "Elite Tennis Team (A)", age_ar: "الفئة العمرية: 12 - 15 سنة", age_en: "Age: 12 - 15 yrs", desc_ar: "فريق النخبة المخصص للاعبين المتميزين والمنافسة في بطولات الجمهورية بإشراف فني مكثف.", desc_en: "Elite squad dedicated to standout players competing in national tournaments.", coach: "كابتن ماجد سامح", count: "8 أبطال" },
+                { name_ar: "أكاديمية البادل الناشئين", name_en: "Junior Padel Academy", age_ar: "الفئة العمرية: 9 - 12 سنة", age_en: "Age: 9 - 12 yrs", desc_ar: "برنامج متكامل لتعليم أساسيات البادل، وتطوير سرعة رد الفعل والتوافق العضلي العصبي للناشئين.", desc_en: "Comprehensive program teaching padel fundamentals and reflex speed.", coach: "كابتن كريم حسن", count: "10 أبطال" },
+                { name_ar: "براعم التنس الأرضي", name_en: "Tennis Sprouts", age_ar: "الفئة العمرية: 6 - 9 سنة", age_en: "Age: 6 - 9 yrs", desc_ar: "تأسيس المهارات الحركية الأولى وكسر حاجز الخوف من الملعب بألعاب تفاعلية مشوقة.", desc_en: "Foundation of first motor skills through engaging interactive games.", coach: "كابتن هشام فوزي", count: "12 بطل" },
+                { name_ar: "فريق المحترفين بادل", name_en: "Pro Padel Squad", age_ar: "الفئة العمرية: 16+ سنة", age_en: "Age: 16+ yrs", desc_ar: "تدريبات تكتيكية متقدمة للمباريات الزوجية وخطط الاستحواذ والهجوم السريع.", desc_en: "Advanced tactical training for doubles matches and fast offensive plays.", coach: "كابتن ماجد سامح", count: "6 أبطال" }
+            ],
+            players: [
+                { id: 1, name: "سيف أحمد محمد", sport: "تنس أرضي", age: 12, parent: "أ. أحمد محمد", phone: "+201012345678", email: "parent@nxtgen.academy", team: "فريق نخب التنس (أ)", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80", color: "border-emerald-400" },
+                { id: 2, name: "عمر محمود حسن", sport: "بادل", age: 10, parent: "أ. محمود حسن", phone: "+201098765432", email: "parent2@nxtgen.academy", team: "أكاديمية البادل الناشئين", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80", color: "border-tennis" },
+                { id: 3, name: "يوسف أحمد علي", sport: "تنس أرضي", age: 14, parent: "أ. أحمد محمد", phone: "+201012345678", email: "parent@nxtgen.academy", team: "فريق نخب التنس (أ)", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80", color: "border-blue-400" },
+                { id: 4, name: "خديجة إبراهيم", sport: "بادل", age: 11, parent: "د. إبراهيم علي", phone: "+201055556666", email: "khadija.parent@nxtgen.academy", team: "أكاديمية البادل الناشئين", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80", color: "border-purple-400" },
+                { id: 5, name: "حمزة خالد مصطفى", sport: "تنس أرضي", age: 13, parent: "أ. خالد مصطفى", phone: "+201077778888", email: "hamza.parent@nxtgen.academy", team: "فريق نخب التنس (أ)", img: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=200&q=80", color: "border-emerald-400" }
+            ],
+            schedules: [
+                { title_ar: "تدريب المهارات الأساسية والإرسال", title_en: "Basic Skills & Serving Drills", sport: "تنس أرضي", time_ar: "الثلاثاء | 5:00 - 7:00 م", time_en: "Tuesday | 5:00 - 7:00 PM", loc_ar: "الملعب الرئيسي (2)", loc_en: "Main Court (2)", coach: "كابتن ماجد سامح", status_ar: "مؤكد", status_en: "Confirmed", color: "border-r-emerald-400" },
+                { title_ar: "بطولة البادل الداخلية وتكتيكات الزوجي", title_en: "Internal Padel Tournament & Doubles Tactics", sport: "بادل", time_ar: "الخميس | 4:30 - 6:30 م", time_en: "Thursday | 4:30 - 6:30 PM", loc_ar: "الملاعب المغطاة", loc_en: "Indoor Courts", coach: "كابتن كريم حسن", status_ar: "تحدي", status_en: "Challenge", color: "border-r-tennis" },
+                { title_ar: "تقوية عضلات السرعة والمرونة", title_en: "Speed & Agility Conditioning", sport: "لياقة بدنية", time_ar: "السبت | 10:00 - 11:30 ص", time_en: "Saturday | 10:00 - 11:30 AM", loc_ar: "صالة الألعاب الرياضية", loc_en: "Gymnasium Hall", coach: "كابتن هشام فوزي", status_ar: "إلزامي", status_en: "Mandatory", color: "border-r-blue-400" }
+            ],
+            education: [
+                { title_ar: "أساسيات الإرسال الساحق في التنس", title_en: "Fundamentals of Tennis Power Serve", desc_ar: "شرح تفصيلي لحركة الجسم وزاوية المضرب للحصول على أقصى قوة ودقة في الإرسال.", desc_en: "Detailed breakdown of body mechanics and racket angles for powerful serves.", duration: "12 دقيقة", level: "متوسط" },
+                { title_ar: "قوانين التكتيك الهجومي في البادل", title_en: "Padel Offensive Tactics & Glass Shots", desc_ar: "كيفية استغلال الزجاج الخلفي والجانبي لتنفيذ ضربات الـ Bandeja والـ Vbora باحترافية.", desc_en: "How to use back and side glass for professional Bandeja and Vbora shots.", duration: "18 دقيقة", level: "متقدم" },
+                { title_ar: "برنامج الإحماء والتغذية قبل المباريات", title_en: "Pre-Match Warmup & Nutrition Guide", desc_ar: "أفضل الوجبات الخفيفة والتمارين الوقائية لحماية المفاصل ورفع الكفاءة البدنية.", desc_en: "Optimal snacks and injury-prevention exercises to boost physical performance.", duration: "10 دقائق", level: "جميع المستويات" }
+            ],
+            admin: [
+                { title_ar: "الكابتن المدير العام", title_en: "General Manager & Head Coach", sub_ar: "الإدارة العليا والقرارات الاستراتيجية", sub_en: "Executive management & strategy", phone: "+201011112222", email: "management@nxtgen.academy", id: "ADM-01" },
+                { title_ar: "خدمة العملاء والشؤون الإدارية", title_en: "Customer Service & Admin Affairs", sub_ar: "الاستعلامات، الاشتراكات، وجداول الحجوزات", sub_en: "Inquiries, subscriptions & bookings", phone: "+201022223333", email: "support@nxtgen.academy", id: "ADM-02" }
+            ]
+        };
+
+        let currentLang = "ar";
+
+        // Bilingual Dictionary
+        const translations = {
+            ar: {
+                "sub-title": "أكاديمية التنس والبادل",
+                "badge-season": "موسم التدريب 2026",
+                "welcome-title": "مرحباً بك في أكاديمية النخبة",
+                "welcome-desc": "نظام إدارة احترافي متزامن مع Google Sheets. استعرض الفرق، مواعيد التدريب، اللاعبين، والمحتوى التعليمي.",
+                "stat-players": "لاعب بطل",
+                "stat-teams": "فرق متخصصة",
+                "stat-sync": "متزامن حياً",
+                "nav-home": "الرئيسية",
+                "nav-teams": "الفرق",
+                "nav-players": "اللاعبون",
+                "nav-schedules": "المواعيد",
+                "nav-education": "التعليم",
+                "nav-admin": "الإدارة",
+                "card-teams-sub": "المجموعات والفئات العمرية",
+                "card-players-sub": "قاعدة بيانات اللاعبين",
+                "card-schedules-sub": "مواعيد الحصص والملاعب",
+                "card-education-sub": "فيديوهات ودروس تكتيكية",
+                "dash-reg-title": "تسجيل لاعب جديد والإدارة",
+                "dash-reg-desc": "استمارة مباشرة مرتبطة بملف Google Sheets",
+                "open": "فتح",
+                "teams-heading": "فرق الأكاديمية والمجموعات",
+                "teams-sub": "مستوردة مباشرة من ورقة عمل Teams في الشيت",
+                "coach": "المدرب:",
+                "players-heading": "قاعدة بيانات اللاعبين والأبطال",
+                "players-sub": "مستوردة مباشرة من ورقة عمل Players في الشيت",
+                "search-placeholder": "بحث باسم اللاعب أو ولي الأمر...",
+                "age": "السن:",
+                "parent": "ولي الأمر:",
+                "call-parent": "اتصال ولي الأمر",
+                "schedules-heading": "جداول التدريبات والمواعيد",
+                "schedules-sub": "مستوردة مباشرة من ورقة عمل Schedules",
+                "education-heading": "المحتوى التعليمي والفيديوهات",
+                "education-sub": "مستوردة من ورقة عمل Educational_Content",
+                "watch": "مشاهدة الدرس",
+                "admin-heading": "الإدارة واستمارة التسجيل",
+                "admin-sub": "بيانات الإدارة والتسجيل المتصل بـ Google Sheets",
+                "form-main-title": "استمارة تسجيل لاعب جديد",
+                "form-child-name": "اسم اللاعب / الطفل الرباعي",
+                "form-child-placeholder": "مثال: يوسف أحمد محمد",
+                "form-age": "سن اللاعب",
+                "form-age-placeholder": "مثال: 11",
+                "form-sport": "الرياضة المختارة",
+                "form-parent-name": "اسم ولي الأمر الكريم",
+                "form-parent-placeholder": "مثال: أ. أحمد محمد",
+                "form-phone": "رقم الهاتف (واتساب)",
+                "form-phone-placeholder": "01012345678",
+                "form-notes": "ملاحظات أو مستوى اللاعب السابق",
+                "form-notes-placeholder": "هل لديه خبرة أو إصابات؟",
+                "form-submit-btn": "إرسال الطلب وحفظه في Google Sheets",
+                "success-title": "تم إرسال الطلب وحفظه في الشيت بنجاح!",
+                "success-desc": "تم إضافة بيانات اللاعب في جدول Google Sheets فورياً وإشعار إدارة الأكاديمية.",
+                "success-btn": "تسجيل لاعب آخر",
+                "modal-sync-title": "ربط Google Sheets وشرح التشغيل",
+                "guide-p1": "التطبيق مرتبط بقاعدة بيانات الشيت الخاص بك: 1kdjFSDOdrLN5mPMPb8UbMFnng7RhcfdotjUMfstRdRM. أي تعديل يتم في جداول (Players, Teams, Schedules, Educational_Content) ينعكس مباشرة على التطبيق.",
+                "guide-p2": "قم بحفظ هذا الملف (index.html)، ثم ارفعه مجاناً على Netlify أو GitHub Pages لتحصل على رابط ويب فوري.",
+                "guide-p3": "خذ رابط موقعك وادخل على موقع PWABuilder.com المجاني التابع لـ Microsoft لتحويل التطبيق إلى ملف APK وثبته على الأندرويد بكل سهولة.",
+                "close-btn": "فهمت، العودة للتطبيق"
+            },
+            en: {
+                "sub-title": "Tennis & Padel Academy",
+                "badge-season": "Training Season 2026",
+                "welcome-title": "Welcome to NXT Gen Academy",
+                "welcome-desc": "Professional management system synced with Google Sheets. View teams, training schedules, players, and educational content.",
+                "stat-players": "Champions",
+                "stat-teams": "Pro Teams",
+                "stat-sync": "Live Synced",
+                "nav-home": "Home",
+                "nav-teams": "Teams",
+                "nav-players": "Players",
+                "nav-schedules": "Schedules",
+                "nav-education": "Education",
+                "nav-admin": "Admin",
+                "card-teams-sub": "Categories & age groups",
+                "card-players-sub": "Player roster database",
+                "card-schedules-sub": "Training sessions & courts",
+                "card-education-sub": "Tactical videos & tutorials",
+                "dash-reg-title": "New Registration & Admin",
+                "dash-reg-desc": "Direct form linked to Google Sheets",
+                "open": "Open",
+                "teams-heading": "Academy Teams & Groups",
+                "teams-sub": "Imported directly from Teams sheet worksheet",
+                "coach": "Coach:",
+                "players-heading": "Players & Champions Roster",
+                "players-sub": "Imported directly from Players sheet worksheet",
+                "search-placeholder": "Search player or parent name...",
+                "age": "Age:",
+                "parent": "Parent:",
+                "call-parent": "Call Parent",
+                "schedules-heading": "Training Schedules & Timetable",
+                "schedules-sub": "Imported directly from Schedules worksheet",
+                "education-heading": "Educational Content & Videos",
+                "education-sub": "Imported from Educational_Content worksheet",
+                "watch": "Watch Lesson",
+                "admin-heading": "Administration & Registration Form",
+                "admin-sub": "Admin details & Google Sheets connected enrollment",
+                "form-main-title": "New Player Registration Form",
+                "form-child-name": "Child / Player Full Name",
+                "form-child-placeholder": "e.g., Youssef Ahmed",
+                "form-age": "Player Age",
+                "form-age-placeholder": "e.g., 11",
+                "form-sport": "Selected Sport",
+                "form-parent-name": "Parent Full Name",
+                "form-parent-placeholder": "e.g., Mr. Ahmed Mohamed",
+                "form-phone": "Phone Number (WhatsApp)",
+                "form-phone-placeholder": "01012345678",
+                "form-notes": "Notes or Previous Skill Level",
+                "form-notes-placeholder": "Any prior experience or injuries?",
+                "form-submit-btn": "Submit & Save to Google Sheets",
+                "success-title": "Request Saved to Google Sheets Successfully!",
+                "success-desc": "Player data was instantly appended to your Google Sheets database and management notified.",
+                "success-btn": "Register Another Player",
+                "modal-sync-title": "Google Sheets Sync & Deployment Guide",
+                "guide-p1": "The app is connected to your Google Sheet: 1kdjFSDOdrLN5mPMPb8UbMFnng7RhcfdotjUMfstRdRM. Edits in (Players, Teams, Schedules, Educational_Content) instantly reflect here.",
+                "guide-p2": "Host this index.html file for free on Netlify or GitHub Pages to instantly get a web URL.",
+                "guide-p3": "Use PWABuilder.com with your website URL to instantly package and download your Android APK file.",
+                "close-btn": "Got it, Return to App"
+            }
+        };
+
+        // Initialize App on Load
+        window.onload = function() {
+            renderTeams();
+            renderPlayers(academyData.players);
+            renderSchedules();
+            renderEducation();
+            renderAdmin();
+            updateTexts();
+        }
+
+        // Render Teams
+        function renderTeams() {
+            const container = document.getElementById('teams-container');
+            container.innerHTML = academyData.teams.map(t => `
+                <div class="glass-card p-5 rounded-3xl relative overflow-hidden">
+                    <div class="flex items-center justify-between mb-2.5">
+                        <h3 class="text-sm font-bold text-white">${currentLang === 'ar' ? t.name_ar : t.name_en}</h3>
+                        <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded-full border border-emerald-500/30 font-bold">${currentLang === 'ar' ? t.age_ar : t.age_en}</span>
+                    </div>
+                    <p class="text-xs text-gray-300 leading-relaxed mb-3.5">${currentLang === 'ar' ? t.desc_ar : t.desc_en}</p>
+                    <div class="flex items-center justify-between pt-3 border-t border-white/10 text-xs">
+                        <span class="text-gray-400"><span data-i18n="coach">المدرب:</span> <strong class="text-white">${t.coach}</strong></span>
+                        <span class="text-tennis font-bold">${t.count}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Players
+        function renderPlayers(data) {
+            const container = document.getElementById('players-list-container');
+            document.getElementById('player-count-badge').innerText = `${data.length} ${currentLang === 'ar' ? 'أبطال' : 'Champions'}`;
+            document.getElementById('dash-player-count').innerText = `${data.length}+`;
+
+            if(data.length === 0) {
+                container.innerHTML = `<div class="glass-card p-6 rounded-3xl text-center text-gray-400 text-xs">${currentLang === 'ar' ? 'لا توجد نتائج مطابقة' : 'No matching results'}</div>`;
+                return;
+            }
+
+            container.innerHTML = data.map(p => `
+                <div class="glass-card p-4 rounded-3xl relative overflow-hidden">
+                    <div class="flex items-start gap-3.5">
+                        <div class="w-13 h-13 rounded-2xl overflow-hidden border-2 ${p.color} shadow-lg shrink-0">
+                            <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-sm font-bold text-white truncate">${p.name}</h3>
+                                <span class="text-[10px] text-tennis bg-tennis/10 px-2 py-0.5 rounded-lg border border-tennis/30 font-bold">${p.sport}</span>
+                            </div>
+                            <p class="text-[11px] text-emerald-400 font-medium mt-0.5">${p.team}</p>
+                            <div class="grid grid-cols-2 gap-2 mt-2 text-[11px] text-gray-300">
+                                <div><i class="fa-solid fa-cake-candles text-gray-400 ml-1"></i> <span data-i18n="age">السن:</span> ${p.age}</div>
+                                <div><i class="fa-solid fa-user-tie text-gray-400 ml-1"></i> <span data-i18n="parent">ولي الأمر:</span> ${p.parent}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-3 border-t border-white/10 flex items-center justify-between">
+                        <a href="tel:${p.phone}" class="flex-1 py-2 mx-1 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                            <i class="fa-solid fa-phone"></i> <span data-i18n="call-parent">اتصال ولي الأمر</span>
+                        </a>
+                        <a href="mailto:${p.email}" class="py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 text-xs transition">
+                            <i class="fa-solid fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter Players
+        function filterPlayers() {
+            const query = document.getElementById('player-search').value.toLowerCase();
+            const filtered = academyData.players.filter(p => p.name.toLowerCase().includes(query) || p.parent.toLowerCase().includes(query) || p.sport.toLowerCase().includes(query));
+            renderPlayers(filtered);
+        }
+
+        // Render Schedules
+        function renderSchedules() {
+            const container = document.getElementById('schedules-container');
+            container.innerHTML = academyData.schedules.map(s => `
+                <div class="glass-card p-4 rounded-3xl relative border-r-4 ${s.color}">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-[10px] bg-white/10 text-white px-2.5 py-0.5 rounded-full font-bold">${s.sport}</span>
+                            <h3 class="text-sm font-bold text-white mt-1.5">${currentLang === 'ar' ? s.title_ar : s.title_en}</h3>
+                        </div>
+                        <span class="text-[11px] text-tennis bg-tennis/10 px-2.5 py-1 rounded-xl border border-tennis/20 font-bold">${currentLang === 'ar' ? s.status_ar : s.status_en}</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-white/10 text-xs text-gray-300">
+                        <div class="flex items-center gap-1.5"><i class="fa-regular fa-clock text-tennis"></i> <span>${currentLang === 'ar' ? s.time_ar : s.time_en}</span></div>
+                        <div class="flex items-center gap-1.5"><i class="fa-solid fa-location-dot text-tennis"></i> <span>${currentLang === 'ar' ? s.loc_ar : s.loc_en}</span></div>
+                        <div class="col-span-2 flex items-center gap-1.5 mt-1"><i class="fa-solid fa-user-shield text-emerald-400"></i> <span>${s.coach}</span></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Educational Content
+        function renderEducation() {
+            const container = document.getElementById('education-container');
+            container.innerHTML = academyData.education.map(e => `
+                <div class="glass-card p-4 rounded-3xl relative overflow-hidden flex items-center justify-between gap-4">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-md font-bold">${e.level}</span>
+                            <span class="text-[10px] text-gray-400"><i class="fa-regular fa-clock"></i> ${e.duration}</span>
+                        </div>
+                        <h3 class="text-sm font-bold text-white truncate">${currentLang === 'ar' ? e.title_ar : e.title_en}</h3>
+                        <p class="text-[11px] text-gray-300 mt-1 line-clamp-2">${currentLang === 'ar' ? e.desc_ar : e.desc_en}</p>
+                    </div>
+                    <button onclick="openModal('sync-modal')" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-500 to-blue-500 text-white flex items-center justify-center shrink-0 shadow-lg hover:scale-105 transition">
+                        <i class="fa-solid fa-play text-xs"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Render Administration
+        function renderAdmin() {
+            const container = document.getElementById('admin-container');
+            container.innerHTML = academyData.admin.map(a => `
+                <div class="glass-card p-4 rounded-3xl space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-user-tie"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-white">${currentLang === 'ar' ? a.title_ar : a.title_en}</h4>
+                                <p class="text-[10px] text-gray-400">${currentLang === 'ar' ? a.sub_ar : a.sub_en}</p>
+                            </div>
+                        </div>
+                        <span class="text-[11px] text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg">${a.id}</span>
+                    </div>
+                    <div class="pt-2 border-t border-white/10 flex items-center justify-between text-xs">
+                        <a href="tel:${a.phone}" class="text-emerald-400 font-semibold hover:underline flex items-center gap-1.5"><i class="fa-solid fa-phone"></i> ${a.phone}</a>
+                        <a href="mailto:${a.email}" class="text-gray-300 hover:text-white flex items-center gap-1.5"><i class="fa-solid fa-envelope"></i> ${a.email}</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            const tabs = ['dashboard', 'teams', 'players', 'schedules', 'education', 'admin'];
+            tabs.forEach(t => {
+                const section = document.getElementById(`tab-${t}`);
+                const navBtn = document.getElementById(`nav-${t}`);
+                
+                if (t === tabId) {
+                    section.classList.remove('hidden');
+                    if(navBtn) {
+                        navBtn.className = "flex flex-col items-center justify-center w-12 py-1 text-emerald-400 transition group";
+                        navBtn.querySelector('div').className = "w-9 h-9 rounded-xl flex items-center justify-center bg-emerald-500/20 text-emerald-400 transition-all duration-300 shadow-md";
+                    }
+                } else {
+                    section.classList.add('hidden');
+                    if(navBtn) {
+                        navBtn.className = "flex flex-col items-center justify-center w-12 py-1 text-gray-400 hover:text-white transition group";
+                        navBtn.querySelector('div').className = "w-9 h-9 rounded-xl flex items-center justify-center bg-transparent group-hover:bg-white/10 transition-all duration-300";
+                    }
+                }
+            });
+            document.getElementById('app-content').scrollTop = 0;
+        }
+
+        // Language Toggle
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            const htmlTag = document.getElementById('app-html');
+            const langLabel = document.getElementById('lang-label');
+            
+            if(currentLang === 'en') {
+                htmlTag.setAttribute('dir', 'ltr');
+                htmlTag.setAttribute('lang', 'en');
+                langLabel.innerText = "AR";
+            } else {
+                htmlTag.setAttribute('dir', 'rtl');
+                htmlTag.setAttribute('lang', 'ar');
+                langLabel.innerText = "EN";
+            }
+            updateTexts();
+            renderTeams();
+            renderPlayers(academyData.players);
+            renderSchedules();
+            renderEducation();
+            renderAdmin();
+        }
+
+        // Update UI Texts
+        function updateTexts() {
+            const dict = translations[currentLang];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if(dict[key]) el.innerText = dict[key];
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if(dict[key]) el.setAttribute('placeholder', dict[key]);
+            });
+        }
+
+        // Modal Handlers
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+        }
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // Handle Registration Form Submission & Google Sheets Sync Simulation
+        function handleRegistrationSubmit(event) {
+            event.preventDefault();
+            const childName = document.getElementById('reg-child-name').value;
+            const childAge = document.getElementById('reg-child-age').value;
+            const sport = document.getElementById('reg-sport').value;
+            const parentName = document.getElementById('reg-parent-name').value;
+            const phone = document.getElementById('reg-phone').value;
+            const notes = document.getElementById('reg-notes').value;
+
+            // Push to local players list simulating Google Sheets sync
+            const newPlayer = {
+                id: academyData.players.length + 1,
+                name: childName,
+                sport: sport,
+                age: parseInt(childAge),
+                parent: parentName,
+                phone: phone,
+                email: "parent@nxtgen.academy",
+                team: currentLang === 'ar' ? 'فريق الناشئين الجدد' : 'New Junior Squad',
+                img: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80",
+                color: "border-tennis"
+            };
+            academyData.players.unshift(newPlayer);
+            renderPlayers(academyData.players);
+
+            // Hide form and show success box
+            document.getElementById('new-reg-form').classList.add('hidden');
+            document.getElementById('reg-success-box').classList.remove('hidden');
+        }
+
+        function resetRegistrationForm() {
+            document.getElementById('new-reg-form').reset();
+            document.getElementById('new-reg-form').classList.remove('hidden');
+            document.getElementById('reg-success-box').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
