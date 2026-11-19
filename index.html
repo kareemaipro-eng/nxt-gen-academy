@@ -69,7 +69,6 @@
         .glow-blue {
             box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
         }
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 4px;
         }
@@ -205,9 +204,7 @@
                     <span class="text-xs bg-emerald-500/15 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/30 font-bold">4 فرق</span>
                 </div>
 
-                <div id="teams-container" class="space-y-3.5">
-                    <!-- Populated dynamically -->
-                </div>
+                <div id="teams-container" class="space-y-3.5"></div>
             </section>
 
             <!-- ==================== TAB 2: PLAYERS (اللاعبون) ==================== -->
@@ -229,9 +226,7 @@
                 </div>
 
                 <!-- Players Dynamic Container -->
-                <div id="players-list-container" class="space-y-3.5">
-                    <!-- Populated via JavaScript -->
-                </div>
+                <div id="players-list-container" class="space-y-3.5"></div>
             </section>
 
             <!-- ==================== TAB 3: SCHEDULES (الجداول والمواعيد) ==================== -->
@@ -244,9 +239,7 @@
                     <span class="text-xs bg-blue-500/15 text-blue-400 px-3 py-1 rounded-full border border-blue-500/30 font-bold">2026</span>
                 </div>
 
-                <div id="schedules-container" class="space-y-3.5">
-                    <!-- Populated dynamically -->
-                </div>
+                <div id="schedules-container" class="space-y-3.5"></div>
             </section>
 
             <!-- ==================== TAB 4: EDUCATIONAL CONTENT (المحتوى التعليمي) ==================== -->
@@ -259,9 +252,7 @@
                     <span class="text-xs bg-purple-500/15 text-purple-400 px-3 py-1 rounded-full border border-purple-500/30 font-bold">Pro</span>
                 </div>
 
-                <div id="education-container" class="space-y-3.5">
-                    <!-- Populated dynamically -->
-                </div>
+                <div id="education-container" class="space-y-3.5"></div>
             </section>
 
             <!-- ==================== TAB 5: ADMINISTRATION & REGISTRATION (الإدارة والتسجيل) ==================== -->
@@ -275,9 +266,7 @@
                 </div>
 
                 <!-- Admin Contacts List -->
-                <div class="space-y-3" id="admin-container">
-                    <!-- Populated dynamically -->
-                </div>
+                <div class="space-y-3" id="admin-container"></div>
 
                 <!-- Registration Form Card -->
                 <div class="glass-card p-5 rounded-3xl relative overflow-hidden mt-6 border border-tennis/30">
@@ -324,7 +313,7 @@
                             <textarea id="reg-notes" rows="2" placeholder="هل لديه خبرة أو إصابات؟" class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-emerald-400 transition resize-none" data-i18n-placeholder="form-notes-placeholder"></textarea>
                         </div>
 
-                        <button type="submit" class="w-full py-3.5 mt-2 rounded-xl bg-gradient-to-r from-emerald-500 to-tennis text-gray-950 font-extrabold text-xs shadow-lg glow-tennis flex items-center justify-center gap-2 hover:opacity-95 transition">
+                        <button type="submit" id="reg-submit-btn" class="w-full py-3.5 mt-2 rounded-xl bg-gradient-to-r from-emerald-500 to-tennis text-gray-950 font-extrabold text-xs shadow-lg glow-tennis flex items-center justify-center gap-2 hover:opacity-95 transition">
                             <i class="fa-solid fa-paper-plane"></i> <span data-i18n="form-submit-btn">إرسال الطلب وحفظه في Google Sheets</span>
                         </button>
                     </form>
@@ -424,7 +413,8 @@
 
     <!-- ==================== JAVASCRIPT APPLICATION LOGIC ==================== -->
     <script>
-        // Database mirroring the exact Google Sheet structure
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3-iYGotn4n0GX6n1HjaGhMdQgK1-la4kBZCkD31fFZMNHBdLxexCf6VUKBWXQ2f05/exec";
+
         let academyData = {
             teams: [
                 { name_ar: "فريق نخب التنس (أ)", name_en: "Elite Tennis Team (A)", age_ar: "الفئة العمرية: 12 - 15 سنة", age_en: "Age: 12 - 15 yrs", desc_ar: "فريق النخبة المخصص للاعبين المتميزين والمنافسة في بطولات الجمهورية بإشراف فني مكثف.", desc_en: "Elite squad dedicated to standout players competing in national tournaments.", coach: "كابتن ماجد سامح", count: "8 أبطال" },
@@ -457,7 +447,6 @@
 
         let currentLang = "ar";
 
-        // Bilingual Dictionary
         const translations = {
             ar: {
                 "sub-title": "أكاديمية التنس والبادل",
@@ -579,7 +568,6 @@
             }
         };
 
-        // Initialize App on Load
         window.onload = function() {
             renderTeams();
             renderPlayers(academyData.players);
@@ -587,9 +575,8 @@
             renderEducation();
             renderAdmin();
             updateTexts();
-        }
+        };
 
-        // Render Teams
         function renderTeams() {
             const container = document.getElementById('teams-container');
             container.innerHTML = academyData.teams.map(t => `
@@ -607,7 +594,6 @@
             `).join('');
         }
 
-        // Render Players
         function renderPlayers(data) {
             const container = document.getElementById('players-list-container');
             document.getElementById('player-count-badge').innerText = `${data.length} ${currentLang === 'ar' ? 'أبطال' : 'Champions'}`;
@@ -648,14 +634,12 @@
             `).join('');
         }
 
-        // Filter Players
         function filterPlayers() {
             const query = document.getElementById('player-search').value.toLowerCase();
             const filtered = academyData.players.filter(p => p.name.toLowerCase().includes(query) || p.parent.toLowerCase().includes(query) || p.sport.toLowerCase().includes(query));
             renderPlayers(filtered);
         }
 
-        // Render Schedules
         function renderSchedules() {
             const container = document.getElementById('schedules-container');
             container.innerHTML = academyData.schedules.map(s => `
@@ -676,7 +660,6 @@
             `).join('');
         }
 
-        // Render Educational Content
         function renderEducation() {
             const container = document.getElementById('education-container');
             container.innerHTML = academyData.education.map(e => `
@@ -696,7 +679,6 @@
             `).join('');
         }
 
-        // Render Administration
         function renderAdmin() {
             const container = document.getElementById('admin-container');
             container.innerHTML = academyData.admin.map(a => `
@@ -721,7 +703,6 @@
             `).join('');
         }
 
-        // Tab Switching Logic
         function switchTab(tabId) {
             const tabs = ['dashboard', 'teams', 'players', 'schedules', 'education', 'admin'];
             tabs.forEach(t => {
@@ -745,7 +726,6 @@
             document.getElementById('app-content').scrollTop = 0;
         }
 
-        // Language Toggle
         function toggleLanguage() {
             currentLang = currentLang === 'ar' ? 'en' : 'ar';
             const htmlTag = document.getElementById('app-html');
@@ -768,7 +748,6 @@
             renderAdmin();
         }
 
-        // Update UI Texts
         function updateTexts() {
             const dict = translations[currentLang];
             document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -781,7 +760,6 @@
             });
         }
 
-        // Modal Handlers
         function openModal(modalId) {
             document.getElementById(modalId).classList.remove('hidden');
         }
@@ -789,9 +767,13 @@
             document.getElementById(modalId).classList.add('hidden');
         }
 
-        // Handle Registration Form Submission & Google Sheets Sync Simulation
-        function handleRegistrationSubmit(event) {
+        async function handleRegistrationSubmit(event) {
             event.preventDefault();
+            const submitBtn = document.getElementById('reg-submit-btn');
+            const originalBtnHtml = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>جاري الإرسال...</span>`;
+
             const childName = document.getElementById('reg-child-name').value;
             const childAge = document.getElementById('reg-child-age').value;
             const sport = document.getElementById('reg-sport').value;
@@ -799,12 +781,30 @@
             const phone = document.getElementById('reg-phone').value;
             const notes = document.getElementById('reg-notes').value;
 
-            // Push to local players list simulating Google Sheets sync
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify({
+                        sheetName: "Form Responses",
+                        childName,
+                        age: childAge,
+                        sport,
+                        parentName,
+                        phone,
+                        notes
+                    })
+                });
+            } catch (err) {
+                console.warn("تعذر الإرسال إلى Google Sheets:", err);
+            }
+
             const newPlayer = {
                 id: academyData.players.length + 1,
                 name: childName,
                 sport: sport,
-                age: parseInt(childAge),
+                age: parseInt(childAge, 10),
                 parent: parentName,
                 phone: phone,
                 email: "parent@nxtgen.academy",
@@ -815,7 +815,8 @@
             academyData.players.unshift(newPlayer);
             renderPlayers(academyData.players);
 
-            // Hide form and show success box
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnHtml;
             document.getElementById('new-reg-form').classList.add('hidden');
             document.getElementById('reg-success-box').classList.remove('hidden');
         }
