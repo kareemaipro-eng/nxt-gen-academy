@@ -1,571 +1,873 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" id="app-html">
 <head>
-   <link rel="manifest" href='data:application/manifest+json,{"name":"NXT Gen Tennis Academy","short_name":"NXT Gen","start_url":"/","display":"standalone","background_color":"#0b0f19","theme_color":"#10b981","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/33/33736.png","sizes":"512x512","type":"image/png"}]}'>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NXT Gen. Tennis Academy | أكاديمية التنس والبادل</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { cairo: ['Cairo', 'sans-serif'], inter: ['Inter', 'sans-serif'] },
-                    colors: { tennis: '#CCFF00', emeraldNeon: '#10B981', blueNeon: '#3B82F6', darkBg: '#05070D' }
-                }
-            }
+  <link rel="manifest" href='data:application/manifest+json,{"name":"NXT Gen Tennis Academy","short_name":"NXT Gen","start_url":"/","display":"standalone","background_color":"#0b0f19","theme_color":"#10b981","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/33/33736.png","sizes":"512x512","type":"image/png"}]}'>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NXT Gen. Tennis Academy | أكاديمية التنس والبادل</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { cairo: ['Cairo', 'sans-serif'], inter: ['Inter', 'sans-serif'] },
+          colors: { tennis: '#CCFF00', emeraldNeon: '#10B981', blueNeon: '#3B82F6', darkBg: '#05070D' }
         }
-    </script>
-    <style>
-        body { font-family: 'Cairo', sans-serif; background: radial-gradient(circle at 50% 0%, #0d1424 0%, #03050a 100%); color: #F3F4F6; min-height: 100vh; }
-        [dir="ltr"] body { font-family: 'Inter', sans-serif; }
-        .glass-card { background: rgba(255, 255, 255, 0.045); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.09); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12); transition: all 0.3s ease; }
-        .glass-nav { background: rgba(5, 8, 16, 0.88); backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px); border-top: 1px solid rgba(255, 255, 255, 0.08); }
-        .glow-tennis { box-shadow: 0 0 25px rgba(204, 255, 0, 0.35); }
-        .glow-emerald { box-shadow: 0 0 25px rgba(16, 185, 129, 0.35); }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
-    </style>
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Cairo', sans-serif; background: radial-gradient(circle at 50% 0%, #0d1424 0%, #03050a 100%); color: #F3F4F6; min-height: 100vh; }
+    .glass-card { background: rgba(255, 255, 255, 0.045); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.09); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12); transition: all 0.3s ease; }
+    .glass-nav { background: rgba(5, 8, 16, 0.9); backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px); border-top: 1px solid rgba(255, 255, 255, 0.08); }
+    .glow-tennis { box-shadow: 0 0 25px rgba(204, 255, 0, 0.35); }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
+  </style>
 </head>
 <body class="flex items-center justify-center p-0 sm:p-4">
 
-    <div class="w-full sm:max-w-md h-screen sm:h-[920px] sm:rounded-[48px] bg-[#05070D] sm:border-[5px] sm:border-white/10 flex flex-col relative overflow-hidden shadow-2xl">
-        
-        <!-- Header -->
-        <header class="px-5 pt-6 pb-4 flex items-center justify-between z-30 glass-nav rounded-b-[32px]">
-            <div class="flex items-center gap-3">
-                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-tennis flex items-center justify-center text-gray-950 font-black text-xl shadow-lg glow-tennis">
-                    <i class="fa-solid fa-table-tennis-paddle-ball"></i>
-                </div>
-                <div>
-                    <h1 class="font-extrabold text-sm tracking-wide text-white">NXT Gen. Academy</h1>
-                    <p class="text-[10px] text-emerald-400 font-bold tracking-wider" data-i18n="sub-title">أكاديمية التنس والبادل</p>
-                </div>
+  <div class="w-full sm:max-w-md h-screen sm:h-[920px] sm:rounded-[48px] bg-[#05070D] sm:border-[5px] sm:border-white/10 flex flex-col relative overflow-hidden shadow-2xl">
+
+    <!-- Header -->
+    <header class="px-4 pt-5 pb-3 flex items-center justify-between z-30 glass-nav rounded-b-[28px]">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-tennis flex items-center justify-center text-gray-950 font-black text-lg shrink-0 glow-tennis">
+          <i class="fa-solid fa-table-tennis-paddle-ball"></i>
+        </div>
+        <div class="min-w-0">
+          <h1 class="font-extrabold text-xs tracking-wide text-white truncate">NXT Gen. Academy</h1>
+          <p id="role-badge" class="text-[10px] text-emerald-400 font-bold truncate">وضع الزائر / غير مسجل</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1.5 shrink-0">
+        <button onclick="fetchLiveSheetData()" title="تحديث من الشيت" class="w-8 h-8 rounded-xl glass-card flex items-center justify-center text-emerald-400 hover:text-white transition">
+          <i id="sync-icon" class="fa-solid fa-rotate text-xs"></i>
+        </button>
+        <button onclick="openAuthModal()" class="px-2.5 py-1.5 rounded-xl bg-tennis text-gray-950 font-extrabold text-[11px] flex items-center gap-1 shadow">
+          <i class="fa-solid fa-user-lock text-[10px]"></i>
+          <span id="auth-btn-text">دخول</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="app-content" class="flex-1 overflow-y-auto px-4 py-5 pb-36 space-y-4">
+
+      <!-- TAB 0: DASHBOARD -->
+      <section id="tab-dashboard" class="space-y-4">
+        <div class="glass-card p-5 rounded-[26px] bg-gradient-to-br from-emerald-950/70 via-transparent to-tennis/10 border border-emerald-500/25">
+          <span class="text-[10px] font-extrabold px-3 py-1 rounded-full bg-tennis/20 text-tennis border border-tennis/30">موسم التدريب 2026</span>
+          <h2 id="welcome-heading" class="text-lg font-black text-white mt-2.5">مرحباً بك في أكاديمية النخبة</h2>
+          <p id="welcome-sub" class="text-xs text-gray-300 mt-1 leading-relaxed">سجّل دخولك بإيميلك لمعرفة صلاحياتك (مدير أعلى، مدرب، أو ولي أمر).</p>
+
+          <div class="grid grid-cols-4 gap-2 mt-4 pt-3 border-t border-white/10 text-center">
+            <div class="glass-card p-2 rounded-xl">
+              <span class="block text-sm font-black text-tennis" id="dash-player-count">0</span>
+              <span class="text-[9px] text-gray-400">اللاعبون</span>
             </div>
-            <div class="flex items-center gap-2">
-                <button onclick="fetchLiveSheetData()" title="تحديث من الشيت" class="w-9 h-9 rounded-xl glass-card flex items-center justify-center text-emerald-400 hover:text-white transition relative">
-                    <i id="sync-icon" class="fa-solid fa-rotate text-xs"></i>
-                    <span id="sync-dot" class="absolute top-2 right-2 w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-                </button>
-                <button onclick="toggleLanguage()" class="px-3 py-1.5 rounded-xl glass-card text-xs font-bold text-tennis hover:bg-white/10 transition flex items-center gap-1.5 border border-tennis/30">
-                    <i class="fa-solid fa-globe text-[11px]"></i>
-                    <span id="lang-label">EN</span>
-                </button>
+            <div class="glass-card p-2 rounded-xl">
+              <span class="block text-sm font-black text-emerald-400" id="dash-team-count">0</span>
+              <span class="text-[9px] text-gray-400">الفرق</span>
             </div>
-        </header>
+            <div class="glass-card p-2 rounded-xl">
+              <span class="block text-sm font-black text-blue-400" id="dash-coach-count">0</span>
+              <span class="text-[9px] text-gray-400">المدربون</span>
+            </div>
+            <div class="glass-card p-2 rounded-xl">
+              <span class="block text-sm font-black text-purple-400" id="dash-sched-count">0</span>
+              <span class="text-[9px] text-gray-400">المواعيد</span>
+            </div>
+          </div>
+        </div>
 
-        <!-- Main Content -->
-        <main id="app-content" class="flex-1 overflow-y-auto px-5 py-6 pb-36 space-y-5">
-            
-            <!-- TAB 0: DASHBOARD -->
-            <section id="tab-dashboard" class="space-y-4">
-                <div class="glass-card p-6 rounded-[28px] relative overflow-hidden bg-gradient-to-br from-emerald-950/70 via-transparent to-tennis/10 border border-emerald-500/25">
-                    <span class="text-[10px] font-extrabold px-3 py-1 rounded-full bg-tennis/20 text-tennis uppercase tracking-widest border border-tennis/30" data-i18n="badge-season">موسم التدريب 2026</span>
-                    <h2 class="text-xl font-black text-white mt-3" data-i18n="welcome-title">مرحباً بك في أكاديمية النخبة</h2>
-                    <p class="text-xs text-gray-300 mt-1.5 leading-relaxed" data-i18n="welcome-desc">متزامن مباشرة مع Google Sheets. جميع الفرق واللاعبين والمواعيد تُحدَّث تلقائياً.</p>
-                    
-                    <div class="grid grid-cols-3 gap-2.5 mt-5 pt-4 border-t border-white/10 text-center">
-                        <div class="glass-card p-2.5 rounded-2xl">
-                            <span class="block text-base font-black text-tennis" id="dash-player-count">...</span>
-                            <span class="text-[10px] text-gray-400 font-semibold" data-i18n="stat-players">لاعب مسجل</span>
-                        </div>
-                        <div class="glass-card p-2.5 rounded-2xl">
-                            <span class="block text-base font-black text-emerald-400" id="dash-team-count">...</span>
-                            <span class="text-[10px] text-gray-400 font-semibold" data-i18n="stat-teams">فرق نشطة</span>
-                        </div>
-                        <div class="glass-card p-2.5 rounded-2xl">
-                            <span class="block text-base font-black text-blue-400" id="dash-sched-count">...</span>
-                            <span class="text-[10px] text-gray-400 font-semibold" data-i18n="stat-sync">حصص مجدولة</span>
-                        </div>
-                    </div>
-                </div>
+        <!-- Quick Grid -->
+        <div class="grid grid-cols-2 gap-3">
+          <button onclick="switchTab('teams')" class="glass-card p-4 rounded-2xl text-start hover:border-emerald-500/50 transition">
+            <div class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-2.5"><i class="fa-solid fa-people-group text-sm"></i></div>
+            <h4 class="text-xs font-bold text-white">الفرق</h4>
+            <p class="text-[10px] text-gray-400 mt-0.5">المجموعات والفئات</p>
+          </button>
 
-                <div class="grid grid-cols-2 gap-3">
-                    <button onclick="switchTab('teams')" class="glass-card p-4 rounded-2xl text-start hover:border-emerald-500/50 transition">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-3"><i class="fa-solid fa-people-group text-base"></i></div>
-                        <h4 class="text-sm font-bold text-white" data-i18n="nav-teams">الفرق</h4>
-                        <p class="text-[10px] text-gray-400 mt-0.5" data-i18n="card-teams-sub">المجموعات والفئات العمرية</p>
-                    </button>
+          <button onclick="switchTab('players')" class="glass-card p-4 rounded-2xl text-start hover:border-tennis/50 transition">
+            <div class="w-9 h-9 rounded-xl bg-tennis/20 text-tennis flex items-center justify-center mb-2.5"><i class="fa-solid fa-users text-sm"></i></div>
+            <h4 class="text-xs font-bold text-white">اللاعبون</h4>
+            <p class="text-[10px] text-gray-400 mt-0.5">بيانات اللاعبين والملاحظات</p>
+          </button>
 
-                    <button onclick="switchTab('players')" class="glass-card p-4 rounded-2xl text-start hover:border-tennis/50 transition">
-                        <div class="w-10 h-10 rounded-xl bg-tennis/20 text-tennis flex items-center justify-center mb-3"><i class="fa-solid fa-users text-base"></i></div>
-                        <h4 class="text-sm font-bold text-white" data-i18n="nav-players">اللاعبون</h4>
-                        <p class="text-[10px] text-gray-400 mt-0.5" data-i18n="card-players-sub">قاعدة بيانات اللاعبين</p>
-                    </button>
+          <button onclick="switchTab('coaches')" class="glass-card p-4 rounded-2xl text-start hover:border-blue-500/50 transition">
+            <div class="w-9 h-9 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center mb-2.5"><i class="fa-solid fa-whistle text-sm"></i></div>
+            <h4 class="text-xs font-bold text-white">المدربون (coaches)</h4>
+            <p class="text-[10px] text-gray-400 mt-0.5">بيانات وإيميلات الكباتن</p>
+          </button>
 
-                    <button onclick="switchTab('schedules')" class="glass-card p-4 rounded-2xl text-start hover:border-blue-500/50 transition">
-                        <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center mb-3"><i class="fa-regular fa-calendar-days text-base"></i></div>
-                        <h4 class="text-sm font-bold text-white" data-i18n="nav-schedules">الجداول والمواعيد</h4>
-                        <p class="text-[10px] text-gray-400 mt-0.5" data-i18n="card-schedules-sub">مواعيد الحصص والملاعب</p>
-                    </button>
+          <button onclick="switchTab('schedules')" class="glass-card p-4 rounded-2xl text-start hover:border-purple-500/50 transition">
+            <div class="w-9 h-9 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-2.5"><i class="fa-regular fa-calendar-days text-sm"></i></div>
+            <h4 class="text-xs font-bold text-white">المواعيد</h4>
+            <p class="text-[10px] text-gray-400 mt-0.5">جداول التمارين والملاعب</p>
+          </button>
+        </div>
 
-                    <button onclick="switchTab('education')" class="glass-card p-4 rounded-2xl text-start hover:border-purple-500/50 transition">
-                        <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-3"><i class="fa-solid fa-graduation-cap text-base"></i></div>
-                        <h4 class="text-sm font-bold text-white" data-i18n="nav-education">المحتوى التعليمي</h4>
-                        <p class="text-[10px] text-gray-400 mt-0.5" data-i18n="card-education-sub">فيديوهات ودروس تكتيكية</p>
-                    </button>
-                </div>
+        <!-- Registration Card -->
+        <div class="glass-card p-4 rounded-2xl flex items-center justify-between border border-tennis/30 bg-gradient-to-r from-tennis/10 to-transparent">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-tennis/20 text-tennis flex items-center justify-center shrink-0"><i class="fa-solid fa-user-plus text-sm"></i></div>
+            <div>
+              <h5 class="text-xs font-bold text-white">تسجيل لاعب جديد</h5>
+              <p class="text-[10px] text-gray-300">إرسال مباشر إلى Google Sheets</p>
+            </div>
+          </div>
+          <button onclick="switchTab('admin')" class="px-3 py-2 rounded-xl bg-tennis text-gray-950 font-black text-xs">فتح</button>
+        </div>
+      </section>
 
-                <div class="glass-card p-4 rounded-2xl flex items-center justify-between border border-tennis/30 bg-gradient-to-r from-tennis/10 to-transparent">
-                    <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-2xl bg-tennis/20 text-tennis flex items-center justify-center shrink-0"><i class="fa-solid fa-user-plus text-base"></i></div>
-                        <div>
-                            <h5 class="text-xs font-bold text-white" data-i18n="dash-reg-title">تسجيل لاعب جديد والإدارة</h5>
-                            <p class="text-[11px] text-gray-300" data-i18n="dash-reg-desc">استمارة مباشرة مرتبطة بملف Google Sheets</p>
-                        </div>
-                    </div>
-                    <button onclick="switchTab('admin')" class="px-3.5 py-2 rounded-xl bg-tennis text-gray-950 font-black text-xs shadow-lg glow-tennis">
-                        <span data-i18n="open">فتح</span>
-                    </button>
-                </div>
-            </section>
+      <!-- TAB 1: TEAMS -->
+      <section id="tab-teams" class="hidden space-y-3.5">
+        <div class="flex justify-between items-center">
+          <h2 class="text-base font-extrabold text-white">فرق الأكاديمية</h2>
+          <span id="teams-badge" class="text-xs bg-emerald-500/15 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/30 font-bold">0</span>
+        </div>
+        <div id="teams-container" class="space-y-3"></div>
+      </section>
 
-            <!-- TAB 1: TEAMS -->
-            <section id="tab-teams" class="hidden space-y-4">
-                <div class="flex justify-between items-center mb-1">
-                    <div>
-                        <h2 class="text-lg font-extrabold text-white" data-i18n="teams-heading">فرق الأكاديمية والمجموعات</h2>
-                        <p class="text-xs text-gray-400" data-i18n="teams-sub">بيانات حية من Google Sheets</p>
-                    </div>
-                    <span id="teams-badge" class="text-xs bg-emerald-500/15 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/30 font-bold">0 فرق</span>
-                </div>
-                <div id="teams-container" class="space-y-3.5"></div>
-            </section>
+      <!-- TAB 2: PLAYERS -->
+      <section id="tab-players" class="hidden space-y-3.5">
+        <div class="flex justify-between items-center">
+          <div>
+            <h2 class="text-base font-extrabold text-white">اللاعبون</h2>
+            <p id="players-filter-note" class="text-[10px] text-emerald-400">يعرض البيانات حسب صلاحيتك</p>
+          </div>
+          <span id="player-count-badge" class="text-xs bg-tennis/15 text-tennis px-3 py-1 rounded-full border border-tennis/30 font-bold">0</span>
+        </div>
+        <input type="text" id="player-search" oninput="filterPlayers()" placeholder="بحث باسم اللاعب أو ولي الأمر..." class="w-full bg-white/5 border border-white/10 rounded-2xl py-2.5 px-4 text-xs text-white placeholder-gray-400 focus:outline-none focus:border-emerald-400">
+        <div id="players-list-container" class="space-y-3"></div>
+      </section>
 
-            <!-- TAB 2: PLAYERS -->
-            <section id="tab-players" class="hidden space-y-4">
-                <div class="flex justify-between items-center mb-1">
-                    <div>
-                        <h2 class="text-lg font-extrabold text-white" data-i18n="players-heading">قاعدة بيانات اللاعبين</h2>
-                        <p class="text-xs text-gray-400" data-i18n="players-sub">بيانات حية من Google Sheets</p>
-                    </div>
-                    <span id="player-count-badge" class="text-xs bg-tennis/15 text-tennis px-3 py-1 rounded-full border border-tennis/30 font-bold">0 لاعب</span>
-                </div>
-                <div class="relative">
-                    <span class="absolute inset-y-0 right-3 flex items-center pr-2 text-gray-400"><i class="fa-solid fa-magnifying-glass text-xs"></i></span>
-                    <input type="text" id="player-search" oninput="filterPlayers()" placeholder="بحث باسم اللاعب أو ولي الأمر..." class="w-full bg-white/5 border border-white/10 rounded-2xl py-2.5 pr-10 pl-4 text-xs text-white placeholder-gray-400 focus:outline-none focus:border-emerald-400 transition">
-                </div>
-                <div id="players-list-container" class="space-y-3.5"></div>
-            </section>
+      <!-- TAB 3: COACHES -->
+      <section id="tab-coaches" class="hidden space-y-3.5">
+        <div class="flex justify-between items-center">
+          <div>
+            <h2 class="text-base font-extrabold text-white">المدربون (coaches)</h2>
+            <p class="text-[10px] text-gray-400">متزامن مباشرة من ورقة coaches</p>
+          </div>
+          <span id="coaches-badge" class="text-xs bg-blue-500/15 text-blue-400 px-3 py-1 rounded-full border border-blue-500/30 font-bold">0</span>
+        </div>
+        <div id="coaches-container" class="space-y-3"></div>
+      </section>
 
-            <!-- TAB 3: SCHEDULES -->
-            <section id="tab-schedules" class="hidden space-y-4">
-                <div class="flex justify-between items-center mb-1">
-                    <div>
-                        <h2 class="text-lg font-extrabold text-white" data-i18n="schedules-heading">جداول التدريبات والمواعيد</h2>
-                        <p class="text-xs text-gray-400" data-i18n="schedules-sub">بيانات حية من Google Sheets</p>
-                    </div>
-                    <span id="schedules-badge" class="text-xs bg-blue-500/15 text-blue-400 px-3 py-1 rounded-full border border-blue-500/30 font-bold">0 حصص</span>
-                </div>
-                <div id="schedules-container" class="space-y-3.5"></div>
-            </section>
+      <!-- TAB 4: SCHEDULES -->
+      <section id="tab-schedules" class="hidden space-y-3.5">
+        <div class="flex justify-between items-center">
+          <div>
+            <h2 class="text-base font-extrabold text-white">جداول التمارين والمواعيد</h2>
+            <p id="schedules-filter-note" class="text-[10px] text-gray-400">متزامن مباشرة من ورقة Schedules</p>
+          </div>
+          <span id="schedules-badge" class="text-xs bg-purple-500/15 text-purple-400 px-3 py-1 rounded-full border border-purple-500/30 font-bold">0</span>
+        </div>
+        <div id="schedules-container" class="space-y-3"></div>
+      </section>
 
-            <!-- TAB 4: EDUCATION -->
-            <section id="tab-education" class="hidden space-y-4">
-                <div class="flex justify-between items-center mb-1">
-                    <div>
-                        <h2 class="text-lg font-extrabold text-white" data-i18n="education-heading">المحتوى التعليمي والفيديوهات</h2>
-                        <p class="text-xs text-gray-400" data-i18n="education-sub">بيانات حية من Google Sheets</p>
-                    </div>
-                </div>
-                <div id="education-container" class="space-y-3.5"></div>
-            </section>
+      <!-- TAB 5: ADMIN & REGISTRATION -->
+      <section id="tab-admin" class="hidden space-y-4">
+        <h2 class="text-base font-extrabold text-white">تسجيل لاعب جديد والإدارة</h2>
 
-            <!-- TAB 5: ADMIN & REGISTRATION -->
-            <section id="tab-admin" class="hidden space-y-4">
-                <div class="flex justify-between items-center mb-1">
-                    <div>
-                        <h2 class="text-lg font-extrabold text-white" data-i18n="admin-heading">الإدارة واستمارة التسجيل</h2>
-                        <p class="text-xs text-gray-400" data-i18n="admin-sub">بيانات الإدارة والتسجيل المتصل بـ Google Sheets</p>
-                    </div>
-                </div>
+        <!-- Super Admin Settings Box (Visible only to Super Admin) -->
+        <div id="super-admin-panel" class="hidden glass-card p-4 rounded-2xl border border-tennis/40 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-extrabold text-tennis"><i class="fa-solid fa-crown ml-1"></i> إعدادات المدير الأعلى وPIN</h3>
+            <span class="text-[10px] text-emerald-400 font-bold">Super Admin</span>
+          </div>
+          <div class="space-y-2 text-xs">
+            <label class="block text-[11px] text-gray-300">إيميل المدير الأعلى الحالي</label>
+            <input type="email" id="cfg-admin-email" class="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-xs text-white">
+            <label class="block text-[11px] text-gray-300">رقم PIN للمدير الأعلى</label>
+            <input type="text" id="cfg-admin-pin" class="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-xs text-white">
+            <label class="block text-[11px] text-gray-300">رقم PIN للمدربين</label>
+            <input type="text" id="cfg-coach-pin" class="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-xs text-white">
+            <button onclick="saveRoleSettings()" class="w-full py-2.5 rounded-xl bg-tennis text-gray-950 font-extrabold text-xs mt-1">حفظ إعدادات الصلاحيات</button>
+          </div>
+        </div>
 
-                <div class="space-y-3" id="admin-container"></div>
-
-                <!-- Registration Form -->
-                <div class="glass-card p-5 rounded-3xl relative overflow-hidden mt-6 border border-tennis/30">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-sm font-black text-white flex items-center gap-2">
-                            <i class="fa-solid fa-user-plus text-tennis"></i> <span data-i18n="form-main-title">استمارة تسجيل لاعب جديد</span>
-                        </h3>
-                        <span class="text-[10px] bg-tennis/20 text-tennis px-2.5 py-0.5 rounded-full font-bold">Live Sync</span>
-                    </div>
-
-                    <form id="new-reg-form" onsubmit="handleRegistrationSubmit(event)" class="space-y-3.5">
-                        <div>
-                            <label class="block text-xs font-bold text-gray-200 mb-1"><span data-i18n="form-child-name">اسم اللاعب / الطفل الرباعي</span> <span class="text-tennis">*</span></label>
-                            <input type="text" id="reg-child-name" required placeholder="مثال: يوسف أحمد محمد" class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-emerald-400 transition">
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-xs font-bold text-gray-200 mb-1"><span data-i18n="form-age">سن اللاعب</span> <span class="text-tennis">*</span></label>
-                                <input type="number" id="reg-child-age" required min="4" max="25" placeholder="مثال: 11" class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-emerald-400 transition">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-gray-200 mb-1"><span data-i18n="form-sport">الرياضة المختارة</span> <span class="text-tennis">*</span></label>
-                                <select id="reg-sport" class="w-full bg-[#0d1322] border border-white/15 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-400 transition">
-                                    <option value="تنس أرضي">تنس أرضي (Tennis)</option>
-                                    <option value="بادل">بادل (Padel)</option>
-                                    <option value="التنس والبادل">التنس والبادل معاً</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold text-gray-200 mb-1"><span data-i18n="form-parent-name">اسم ولي الأمر الكريم</span> <span class="text-tennis">*</span></label>
-                            <input type="text" id="reg-parent-name" required placeholder="مثال: أ. أحمد محمد" class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-emerald-400 transition">
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold text-gray-200 mb-1"><span data-i18n="form-phone">رقم الهاتف (واتساب)</span> <span class="text-tennis">*</span></label>
-                            <input type="tel" id="reg-phone" required placeholder="01012345678" class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-emerald-400 transition">
-                        </div>
-
-                        <!-- حقل البريد الإلكتروني -->
-                        <div>
-                            <label class="block text-xs font-bold text-gray-200 mb-1"><span data-i18n="form-email">البريد الإلكتروني</span> <span class="text-tennis">*</span></label>
-                            <input type="email" id="reg-email" required placeholder="يرجى إدخال الإيميل (example@gmail.com)" class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-emerald-400 transition">
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold text-gray-200 mb-1" data-i18n="form-notes">ملاحظات أو مستوى اللاعب السابق</label>
-                            <textarea id="reg-notes" rows="2" placeholder="هل لديه خبرة أو إصابات؟" class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-emerald-400 transition resize-none"></textarea>
-                        </div>
-
-                        <button type="submit" id="reg-submit-btn" class="w-full py-3.5 mt-2 rounded-xl bg-gradient-to-r from-emerald-500 to-tennis text-gray-950 font-extrabold text-xs shadow-lg glow-tennis flex items-center justify-center gap-2 hover:opacity-95 transition">
-                            <i class="fa-solid fa-paper-plane"></i> <span data-i18n="form-submit-btn">إرسال الطلب وحفظه في Google Sheets</span>
-                        </button>
-                    </form>
-
-                    <div id="reg-success-box" class="hidden flex flex-col items-center text-center py-8 space-y-3">
-                        <div class="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-3xl glow-emerald animate-bounce">
-                            <i class="fa-solid fa-check"></i>
-                        </div>
-                        <h3 class="text-base font-bold text-white" data-i18n="success-title">تم إرسال الطلب وحفظه في الشيت بنجاح!</h3>
-                        <p class="text-xs text-gray-300 leading-relaxed max-w-xs" data-i18n="success-desc">تم إضافة بيانات اللاعب في جدول Google Sheets فورياً.</p>
-                        <button onclick="resetRegistrationForm()" class="mt-4 px-6 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs text-white font-semibold transition" data-i18n="success-btn">تسجيل لاعب آخر</button>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <!-- Bottom Navigation -->
-        <nav class="absolute bottom-0 left-0 right-0 h-20 glass-nav px-2 flex items-center justify-around z-30 rounded-t-[32px] shadow-2xl">
-            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex flex-col items-center justify-center w-12 py-1 text-emerald-400 transition">
-                <div class="w-9 h-9 rounded-xl flex items-center justify-center bg-emerald-500/20 text-emerald-400 shadow-md"><i class="fa-solid fa-house text-xs"></i></div>
-                <span class="text-[9px] font-extrabold mt-1" data-i18n="nav-home">الرئيسية</span>
+        <!-- Registration Form -->
+        <div class="glass-card p-5 rounded-3xl border border-tennis/30">
+          <h3 class="text-sm font-black text-white mb-3"><i class="fa-solid fa-user-plus text-tennis ml-1"></i> استمارة تسجيل لاعب جديد</h3>
+          <form id="new-reg-form" onsubmit="handleRegistrationSubmit(event)" class="space-y-3">
+            <div>
+              <label class="block text-xs font-bold text-gray-200 mb-1">اسم اللاعب / الطفل *</label>
+              <input type="text" id="reg-child-name" required placeholder="مثال: يوسف أحمد" class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white">
+            </div>
+            <div class="grid grid-cols-2 gap-2.5">
+              <div>
+                <label class="block text-xs font-bold text-gray-200 mb-1">السن *</label>
+                <input type="number" id="reg-child-age" required min="4" max="25" placeholder="11" class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-200 mb-1">الرياضة *</label>
+                <select id="reg-sport" class="w-full bg-[#0d1322] border border-white/15 rounded-xl px-3 py-2.5 text-xs text-white">
+                  <option value="تنس">تنس</option>
+                  <option value="بادل">بادل</option>
+                  <option value="تنس وبادل">تنس وبادل</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-200 mb-1">اسم ولي الأمر *</label>
+              <input type="text" id="reg-parent-name" required placeholder="أ. أحمد محمد" class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-200 mb-1">رقم الهاتف *</label>
+              <input type="tel" id="reg-phone" required placeholder="01012345678" class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-200 mb-1">البريد الإلكتروني (Parent_Email) *</label>
+              <input type="email" id="reg-email" required placeholder="يرجى إدخال الإيميل" class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-200 mb-1">ملاحظات</label>
+              <textarea id="reg-notes" rows="2" placeholder="أي ملاحظات إضافية..." class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white resize-none"></textarea>
+            </div>
+            <button type="submit" id="reg-submit-btn" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-tennis text-gray-950 font-extrabold text-xs shadow-lg glow-tennis">
+              إرسال الطلب وحفظه في Google Sheets
             </button>
-            <button onclick="switchTab('teams')" id="nav-teams" class="flex flex-col items-center justify-center w-12 py-1 text-gray-400 hover:text-white transition">
-                <div class="w-9 h-9 rounded-xl flex items-center justify-center"><i class="fa-solid fa-people-group text-xs"></i></div>
-                <span class="text-[9px] font-medium mt-1" data-i18n="nav-teams">الفرق</span>
-            </button>
-            <button onclick="switchTab('players')" id="nav-players" class="flex flex-col items-center justify-center w-12 py-1 text-gray-400 hover:text-white transition">
-                <div class="w-9 h-9 rounded-xl flex items-center justify-center"><i class="fa-solid fa-users text-xs"></i></div>
-                <span class="text-[9px] font-medium mt-1" data-i18n="nav-players">اللاعبون</span>
-            </button>
-            <button onclick="switchTab('schedules')" id="nav-schedules" class="flex flex-col items-center justify-center w-12 py-1 text-gray-400 hover:text-white transition">
-                <div class="w-9 h-9 rounded-xl flex items-center justify-center"><i class="fa-regular fa-calendar-days text-xs"></i></div>
-                <span class="text-[9px] font-medium mt-1" data-i18n="nav-schedules">المواعيد</span>
-            </button>
-            <button onclick="switchTab('education')" id="nav-education" class="flex flex-col items-center justify-center w-12 py-1 text-gray-400 hover:text-white transition">
-                <div class="w-9 h-9 rounded-xl flex items-center justify-center"><i class="fa-solid fa-graduation-cap text-xs"></i></div>
-                <span class="text-[9px] font-medium mt-1" data-i18n="nav-education">التعليم</span>
-            </button>
-            <button onclick="switchTab('admin')" id="nav-admin" class="flex flex-col items-center justify-center w-12 py-1 text-gray-400 hover:text-white transition">
-                <div class="w-9 h-9 rounded-xl flex items-center justify-center"><i class="fa-solid fa-headset text-xs"></i></div>
-                <span class="text-[9px] font-medium mt-1" data-i18n="nav-admin">الإدارة</span>
-            </button>
-        </nav>
+          </form>
+
+          <div id="reg-success-box" class="hidden text-center py-6 space-y-2.5">
+            <div class="w-14 h-14 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl mx-auto"><i class="fa-solid fa-check"></i></div>
+            <h4 class="text-sm font-bold text-white">تم إرسال الطلب وحفظه في الشيت بنجاح</h4>
+            <button onclick="resetRegistrationForm()" class="px-5 py-2 rounded-xl bg-white/10 text-xs text-white font-bold">تسجيل لاعب آخر</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav class="absolute bottom-0 left-0 right-0 h-20 glass-nav px-1.5 flex items-center justify-around z-30 rounded-t-[28px]">
+      <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex flex-col items-center justify-center w-12 py-1 text-emerald-400">
+        <div class="w-8 h-8 rounded-xl flex items-center justify-center bg-emerald-500/20"><i class="fa-solid fa-house text-xs"></i></div>
+        <span class="text-[9px] font-extrabold mt-1">الرئيسية</span>
+      </button>
+      <button onclick="switchTab('teams')" id="nav-teams" class="flex flex-col items-center justify-center w-12 py-1 text-gray-400">
+        <div class="w-8 h-8 rounded-xl flex items-center justify-center"><i class="fa-solid fa-people-group text-xs"></i></div>
+        <span class="text-[9px] mt-1">الفرق</span>
+      </button>
+      <button onclick="switchTab('players')" id="nav-players" class="flex flex-col items-center justify-center w-12 py-1 text-gray-400">
+        <div class="w-8 h-8 rounded-xl flex items-center justify-center"><i class="fa-solid fa-users text-xs"></i></div>
+        <span class="text-[9px] mt-1">اللاعبون</span>
+      </button>
+      <button onclick="switchTab('coaches')" id="nav-coaches" class="flex flex-col items-center justify-center w-12 py-1 text-gray-400">
+        <div class="w-8 h-8 rounded-xl flex items-center justify-center"><i class="fa-solid fa-whistle text-xs"></i></div>
+        <span class="text-[9px] mt-1">المدربون</span>
+      </button>
+      <button onclick="switchTab('schedules')" id="nav-schedules" class="flex flex-col items-center justify-center w-12 py-1 text-gray-400">
+        <div class="w-8 h-8 rounded-xl flex items-center justify-center"><i class="fa-regular fa-calendar-days text-xs"></i></div>
+        <span class="text-[9px] mt-1">المواعيد</span>
+      </button>
+      <button onclick="switchTab('admin')" id="nav-admin" class="flex flex-col items-center justify-center w-12 py-1 text-gray-400">
+        <div class="w-8 h-8 rounded-xl flex items-center justify-center"><i class="fa-solid fa-user-plus text-xs"></i></div>
+        <span class="text-[9px] mt-1">التسجيل</span>
+      </button>
+    </nav>
+
+    <!-- Login Modal -->
+    <div id="auth-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+      <div class="glass-card w-full max-w-sm p-5 rounded-3xl border border-emerald-500/30 space-y-3.5">
+        <div class="flex justify-between items-center">
+          <h3 class="text-sm font-extrabold text-white"><i class="fa-solid fa-right-to-bracket text-tennis ml-1"></i> تسجيل الدخول وتحديد الصلاحية</h3>
+          <button onclick="closeAuthModal()" class="w-8 h-8 rounded-full bg-white/10 text-gray-300 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <p class="text-[11px] text-gray-300 leading-relaxed">
+          • <b>ولي الأمر:</b> أدخل إيميلك المسجل في `Parent_Email` لرؤية بيانات اللاعب الخاص بك فقط.<br>
+          • <b>المدرب / المدير الأعلى:</b> أدخل إيميلك ورقم الـ PIN.
+        </p>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-200 mb-1">البريد الإلكتروني</label>
+          <input type="email" id="login-email" placeholder="name@example.com" class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-200 mb-1">رقم PIN (للمدير والمدرب فقط)</label>
+          <input type="password" id="login-pin" placeholder="مثال: 1234" class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white">
+        </div>
+
+        <p id="login-error" class="text-[11px] text-red-400 hidden"></p>
+
+        <div class="flex gap-2 pt-1">
+          <button onclick="submitLogin()" class="flex-1 py-2.5 rounded-xl bg-tennis text-gray-950 font-extrabold text-xs">دخول</button>
+          <button onclick="logoutUser()" class="px-3.5 py-2.5 rounded-xl bg-white/10 text-gray-200 font-bold text-xs">خروج</button>
+        </div>
+      </div>
     </div>
 
-    <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3-iYGotn4n0GX6n1HjaGhMdQgK1-la4kBZCkD31fFZMNHBdLxexCf6VUKBWXQ2f05/exec";
+    <!-- Edit Modal (For Super Admin & Coach) -->
+    <div id="edit-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+      <div class="glass-card w-full max-w-sm p-5 rounded-3xl border border-tennis/40 space-y-3">
+        <div class="flex justify-between items-center">
+          <h3 id="edit-modal-title" class="text-sm font-extrabold text-white">تعديل البيانات</h3>
+          <button onclick="closeEditModal()" class="w-8 h-8 rounded-full bg-white/10 text-gray-300 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="edit-modal-fields" class="space-y-2.5 text-xs"></div>
+        <button id="edit-modal-save-btn" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-tennis text-gray-950 font-extrabold text-xs">حفظ التعديل في Google Sheets</button>
+      </div>
+    </div>
 
-        let liveData = { teams: [], players: [], schedules: [], education: [], admin: [] };
-        let currentLang = "ar";
+  </div>
 
-        function pick(row, keys, fallback = "") {
-            for (const k of keys) {
-                if (row[k] !== undefined && row[k] !== null && String(row[k]).trim() !== "") {
-                    return row[k];
-                }
-            }
-            return fallback;
+  <script>
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3-iYGotn4n0GX6n1HjaGhMdQgK1-la4kBZCkD31fFZMNHBdLxexCf6VUKBWXQ2f05/exec";
+
+    const DEFAULT_SECURITY = {
+      superAdminEmail: "kareem.aipro@gmail.com",
+      superAdminPin: "2026",
+      coachPin: "1111"
+    };
+
+    function getSecurityConfig() {
+      const saved = localStorage.getItem("nxt_sec_cfg");
+      return saved ? { ...DEFAULT_SECURITY, ...JSON.parse(saved) } : { ...DEFAULT_SECURITY };
+    }
+
+    let liveData = { teams: [], players: [], coaches: [], schedules: [], admin: [] };
+    let sessionUser = { role: "guest", email: "", coachName: "" };
+
+    function pick(row, keys, fallback = "") {
+      for (const k of keys) {
+        if (row[k] !== undefined && row[k] !== null && String(row[k]).trim() !== "") return row[k];
+      }
+      return fallback;
+    }
+
+    function formatTime(val) {
+      if (!val) return "";
+      const s = String(val);
+      if (s.includes("T")) {
+        const d = new Date(s);
+        if (!isNaN(d)) return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      }
+      return s;
+    }
+
+    function formatDate(val) {
+      if (!val) return "";
+      const s = String(val);
+      return s.includes("T") ? s.split("T")[0] : s;
+    }
+
+    function syncSuperAdminFromSheet(adminRows) {
+      if (!Array.isArray(adminRows) || !adminRows.length) return;
+      const cfg = getSecurityConfig();
+      const first = adminRows[0];
+      const sheetEmail = String(pick(first, ["البريد الإلكتروني", "Email", "ايميل المدير"], "")).trim();
+      const sheetPin = String(pick(first, ["PIN", "pin", "الرقم السري"], "")).trim();
+      if (sheetEmail) cfg.superAdminEmail = sheetEmail;
+      if (sheetPin) cfg.superAdminPin = sheetPin;
+      localStorage.setItem("nxt_sec_cfg", JSON.stringify(cfg));
+    }
+
+    async function fetchLiveSheetData() {
+      const icon = document.getElementById("sync-icon");
+      if (icon) icon.classList.add("fa-spin");
+
+      try {
+        const res = await fetch(GOOGLE_SCRIPT_URL + "?t=" + Date.now());
+        const json = await res.json();
+        const sheets = json.data || json;
+
+        liveData.teams = sheets["Teams"] || sheets["الفرق"] || [];
+        liveData.players = sheets["Players"] || sheets["اللاعبين"] || [];
+        liveData.coaches = sheets["coaches"] || sheets["Coaches"] || sheets["المدربين"] || [];
+        liveData.schedules = sheets["Schedules"] || sheets["المواعيد"] || [];
+        liveData.admin = sheets["Administration"] || sheets["Admin"] || [];
+
+        syncSuperAdminFromSheet(liveData.admin);
+        applyRoleUI();
+        renderAll();
+      } catch (err) {
+        console.error(err);
+      } finally {
+        if (icon) icon.classList.remove("fa-spin");
+      }
+    }
+
+    function applyRoleUI() {
+      const badge = document.getElementById("role-badge");
+      const authBtn = document.getElementById("auth-btn-text");
+      const superPanel = document.getElementById("super-admin-panel");
+      const cfg = getSecurityConfig();
+
+      document.getElementById("cfg-admin-email").value = cfg.superAdminEmail;
+      document.getElementById("cfg-admin-pin").value = cfg.superAdminPin;
+      document.getElementById("cfg-coach-pin").value = cfg.coachPin;
+
+      if (sessionUser.role === "super_admin") {
+        badge.innerText = "المدير الأعلى (صلاحية كاملة)";
+        authBtn.innerText = "حسابي";
+        superPanel.classList.remove("hidden");
+      } else if (sessionUser.role === "coach") {
+        badge.innerText = `مدرب: ${sessionUser.coachName || sessionUser.email}`;
+        authBtn.innerText = "حسابي";
+        superPanel.classList.add("hidden");
+      } else if (sessionUser.role === "parent") {
+        badge.innerText = `ولي أمر: ${sessionUser.email}`;
+        authBtn.innerText = "حسابي";
+        superPanel.classList.add("hidden");
+      } else {
+        badge.innerText = "وضع الزائر / غير مسجل";
+        authBtn.innerText = "دخول";
+        superPanel.classList.add("hidden");
+      }
+    }
+
+    function openAuthModal() {
+      document.getElementById("login-error").classList.add("hidden");
+      document.getElementById("login-email").value = sessionUser.email || "";
+      document.getElementById("login-pin").value = "";
+      document.getElementById("auth-modal").classList.remove("hidden");
+    }
+
+    function closeAuthModal() {
+      document.getElementById("auth-modal").classList.add("hidden");
+    }
+
+    function submitLogin() {
+      const email = document.getElementById("login-email").value.trim().toLowerCase();
+      const pin = document.getElementById("login-pin").value.trim();
+      const errEl = document.getElementById("login-error");
+      const cfg = getSecurityConfig();
+
+      if (!email) {
+        errEl.innerText = "يرجى إدخال البريد الإلكتروني أولاً.";
+        errEl.classList.remove("hidden");
+        return;
+      }
+
+      if (email === cfg.superAdminEmail.toLowerCase()) {
+        if (pin !== cfg.superAdminPin) {
+          errEl.innerText = "رقم PIN الخاص بالمدير الأعلى غير صحيح.";
+          errEl.classList.remove("hidden");
+          return;
         }
+        sessionUser = { role: "super_admin", email, coachName: "المدير الأعلى" };
+        applyRoleUI();
+        renderAll();
+        closeAuthModal();
+        return;
+      }
 
-        function formatTime(val) {
-            if (!val) return "";
-            const s = String(val);
-            if (s.includes("T")) {
-                const d = new Date(s);
-                if (!isNaN(d)) return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            }
-            return s;
+      const matchedCoach = liveData.coaches.find(
+        (c) => String(pick(c, ["ايميل المدرب", "Email", "email"], "")).trim().toLowerCase() === email
+      );
+      if (matchedCoach) {
+        if (pin !== cfg.coachPin) {
+          errEl.innerText = "رقم PIN الخاص بالمدرب غير صحيح.";
+          errEl.classList.remove("hidden");
+          return;
         }
+        sessionUser = {
+          role: "coach",
+          email,
+          coachName: pick(matchedCoach, ["اسم المدرب", "Name"], email)
+        };
+        applyRoleUI();
+        renderAll();
+        closeAuthModal();
+        return;
+      }
 
-        function formatDate(val) {
-            if (!val) return "";
-            const s = String(val);
-            if (s.includes("T")) return s.split("T")[0];
-            return s;
+      const matchedPlayers = liveData.players.filter(
+        (p) => String(pick(p, ["Parent_Email", "parent_email", "Email"], "")).trim().toLowerCase() === email
+      );
+      if (matchedPlayers.length > 0) {
+        sessionUser = { role: "parent", email, coachName: "" };
+        applyRoleUI();
+        renderAll();
+        closeAuthModal();
+        return;
+      }
+
+      errEl.innerText = "هذا الإيميل غير مسجل كولي أمر أو مدرب أو مدير أعلى.";
+      errEl.classList.remove("hidden");
+    }
+
+    function logoutUser() {
+      sessionUser = { role: "guest", email: "", coachName: "" };
+      applyRoleUI();
+      renderAll();
+      closeAuthModal();
+    }
+
+    function saveRoleSettings() {
+      const cfg = {
+        superAdminEmail: document.getElementById("cfg-admin-email").value.trim() || DEFAULT_SECURITY.superAdminEmail,
+        superAdminPin: document.getElementById("cfg-admin-pin").value.trim() || DEFAULT_SECURITY.superAdminPin,
+        coachPin: document.getElementById("cfg-coach-pin").value.trim() || DEFAULT_SECURITY.coachPin
+      };
+      localStorage.setItem("nxt_sec_cfg", JSON.stringify(cfg));
+      applyRoleUI();
+      alert("تم حفظ إعدادات المدير الأعلى ورقم الـ PIN بنجاح.");
+    }
+
+    function getVisiblePlayers() {
+      if (sessionUser.role === "super_admin" || sessionUser.role === "coach") {
+        return liveData.players;
+      }
+      if (sessionUser.role === "parent") {
+        return liveData.players.filter(
+          (p) => String(pick(p, ["Parent_Email", "parent_email", "Email"], "")).trim().toLowerCase() === sessionUser.email
+        );
+      }
+      return [];
+    }
+
+    function getVisibleSchedules() {
+      if (sessionUser.role === "super_admin" || sessionUser.role === "coach" || sessionUser.role === "guest") {
+        return liveData.schedules;
+      }
+      if (sessionUser.role === "parent") {
+        const myTeams = new Set(
+          getVisiblePlayers().map((p) => String(pick(p, ["Team_ID", "team_id"], "")).trim())
+        );
+        return liveData.schedules.filter((s) => myTeams.has(String(pick(s, ["معرف الفريق", "Team_ID"], "")).trim()));
+      }
+      return [];
+    }
+
+    function renderAll() {
+      const visiblePlayers = getVisiblePlayers();
+      const visibleSchedules = getVisibleSchedules();
+
+      document.getElementById("dash-player-count").innerText = visiblePlayers.length;
+      document.getElementById("dash-team-count").innerText = liveData.teams.length;
+      document.getElementById("dash-coach-count").innerText = liveData.coaches.length;
+      document.getElementById("dash-sched-count").innerText = visibleSchedules.length;
+
+      renderTeams();
+      renderPlayers(visiblePlayers);
+      renderCoaches();
+      renderSchedules(visibleSchedules);
+    }
+
+    function renderTeams() {
+      const container = document.getElementById("teams-container");
+      document.getElementById("teams-badge").innerText = liveData.teams.length;
+      if (!liveData.teams.length) {
+        container.innerHTML = `<div class="glass-card p-5 rounded-2xl text-center text-xs text-gray-400">لا توجد فرق في الشيت</div>`;
+        return;
+      }
+      container.innerHTML = liveData.teams.map((t) => {
+        const name = pick(t, ["اسم الفريق / الفئة", "اسم الفريق", "Team_Name"]);
+        const sport = pick(t, ["نوع الرياضة", "Sport"]);
+        const coach = pick(t, ["اسم المدرب", "المدرب"]);
+        const level = pick(t, ["الفئة العمرية / المستوى", "الفئة العمرية"]);
+        const id = pick(t, ["معرف الفريق", "Team_ID"]);
+        const cover = pick(t, ["cover", "Cover"]);
+        return `
+          <div class="glass-card rounded-3xl overflow-hidden">
+            ${cover ? `<img src="${cover}" alt="${name}" class="w-full h-32 object-cover">` : ""}
+            <div class="p-4">
+              <div class="flex justify-between items-center mb-1.5">
+                <h3 class="text-sm font-bold text-white">${name}</h3>
+                <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded-full font-bold">${sport}</span>
+              </div>
+              <p class="text-xs text-gray-300 mb-2.5">${level}</p>
+              <div class="flex justify-between text-xs pt-2 border-t border-white/10">
+                <span class="text-gray-400">المدرب: <strong class="text-white">${coach}</strong></span>
+                <span class="text-tennis font-bold">${id}</span>
+              </div>
+            </div>
+          </div>`;
+      }).join("");
+    }
+
+    function renderPlayers(data) {
+      const container = document.getElementById("players-list-container");
+      const note = document.getElementById("players-filter-note");
+      document.getElementById("player-count-badge").innerText = data.length;
+
+      if (sessionUser.role === "parent") {
+        note.innerText = `يعرض فقط اللاعب المرتبط بإيميلك (${sessionUser.email})`;
+      } else if (sessionUser.role === "guest") {
+        note.innerText = "سجّل دخولك كولي أمر أو مدرب أو مدير أعلى لعرض بيانات اللاعبين";
+      } else {
+        note.innerText = `صلاحية ${sessionUser.role === "super_admin" ? "المدير الأعلى" : "المدرب"}`;
+      }
+
+      if (!data.length) {
+        container.innerHTML = `<div class="glass-card p-5 rounded-2xl text-center text-xs text-gray-400">لا توجد بيانات لاعبين معروضة لهذا الحساب</div>`;
+        return;
+      }
+
+      const canEditPlayer = sessionUser.role === "super_admin" || sessionUser.role === "coach";
+
+      container.innerHTML = data.map((p) => {
+        const playerId = pick(p, ["Player_ID"]);
+        const name = pick(p, ["Player_Name"]);
+        const teamId = pick(p, ["Team_ID"]);
+        const parent = pick(p, ["Parent_Name"]);
+        const phone = pick(p, ["Parent_Phone"]);
+        const email = pick(p, ["Parent_Email"]);
+        const cover = pick(p, ["cover"], "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80");
+        const noteVal = pick(p, ["Coach_Note", "ملاحظة المدرب"], "");
+
+        return `
+          <div class="glass-card p-4 rounded-3xl space-y-2.5">
+            <div class="flex items-center gap-3">
+              <img src="${cover}" alt="${name}" class="w-13 h-13 rounded-2xl object-cover border-2 border-emerald-400 shrink-0">
+              <div class="flex-1 min-w-0">
+                <div class="flex justify-between items-start">
+                  <h3 class="text-sm font-bold text-white truncate">${name}</h3>
+                  <span class="text-[10px] text-tennis bg-tennis/10 px-2 py-0.5 rounded-lg font-bold">${teamId}</span>
+                </div>
+                <p class="text-[11px] text-gray-300 mt-0.5">ولي الأمر: ${parent} (${playerId})</p>
+                ${sessionUser.role !== "guest" ? `<p class="text-[11px] text-emerald-400">${phone} • ${email}</p>` : ""}
+              </div>
+            </div>
+            ${noteVal ? `<div class="p-2.5 rounded-xl bg-white/5 text-[11px] text-tennis border border-white/10">ملاحظة المدرب: ${noteVal}</div>` : ""}
+            ${canEditPlayer ? `
+              <button onclick='openPlayerEditModal(${JSON.stringify(p).replace(/'/g, "&#39;")})' class="w-full py-2 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-bold text-tennis">
+                ${sessionUser.role === "super_admin" ? "تعديل بيانات / صورة / ملاحظة اللاعب" : "إضافة أو تعديل ملاحظة اللاعب"}
+              </button>` : ""}
+          </div>`;
+      }).join("");
+    }
+
+    function filterPlayers() {
+      const q = document.getElementById("player-search").value.toLowerCase();
+      const base = getVisiblePlayers();
+      renderPlayers(base.filter((p) => JSON.stringify(p).toLowerCase().includes(q)));
+    }
+
+    function renderCoaches() {
+      const container = document.getElementById("coaches-container");
+      document.getElementById("coaches-badge").innerText = liveData.coaches.length;
+
+      if (!liveData.coaches.length) {
+        container.innerHTML = `<div class="glass-card p-5 rounded-2xl text-center text-xs text-gray-400">لا توجد بيانات في شيت coaches</div>`;
+        return;
+      }
+
+      container.innerHTML = liveData.coaches.map((c) => {
+        const code = pick(c, ["كود المدرب"]);
+        const name = pick(c, ["اسم المدرب"]);
+        const phone = pick(c, ["رقم المدرب"]);
+        const email = pick(c, ["ايميل المدرب"]);
+        const branch = pick(c, ["الفرع"]);
+
+        return `
+          <div class="glass-card p-4 rounded-3xl space-y-2">
+            <div class="flex justify-between items-center">
+              <h3 class="text-sm font-bold text-white">${name}</h3>
+              <span class="text-[10px] bg-blue-500/20 text-blue-300 px-2.5 py-0.5 rounded-full font-bold">${branch || code}</span>
+            </div>
+            <p class="text-xs text-emerald-400">${email}</p>
+            <p class="text-xs text-gray-300">${phone}</p>
+            ${sessionUser.role === "super_admin" ? `
+              <button onclick='openCoachEmailModal(${JSON.stringify(c).replace(/'/g, "&#39;")})' class="w-full py-2 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-bold text-tennis mt-1">
+                تغيير إيميل المدرب
+              </button>` : ""}
+          </div>`;
+      }).join("");
+    }
+
+    function renderSchedules(data) {
+      const container = document.getElementById("schedules-container");
+      const note = document.getElementById("schedules-filter-note");
+      document.getElementById("schedules-badge").innerText = data.length;
+
+      note.innerText = sessionUser.role === "parent"
+        ? "يعرض فقط مواعيد الفرق المرتبطة بلاعبك"
+        : "متزامن مباشرة من ورقة Schedules";
+
+      if (!data.length) {
+        container.innerHTML = `<div class="glass-card p-5 rounded-2xl text-center text-xs text-gray-400">لا توجد مواعيد متاحة</div>`;
+        return;
+      }
+
+      const canEditSchedule = sessionUser.role === "super_admin" || sessionUser.role === "coach";
+
+      container.innerHTML = data.map((s) => {
+        const title = pick(s, ["عنوان التمرين / الحصة"]);
+        const team = pick(s, ["معرف الفريق"]);
+        const day = formatDate(pick(s, ["اليوم"]));
+        const time = formatTime(pick(s, ["التوقيت"]));
+        const court = pick(s, ["الملعب"]);
+        const coach = pick(s, ["المدرب المسؤول"]);
+        const noteVal = pick(s, ["ملاحظة المدرب"], "");
+
+        return `
+          <div class="glass-card p-4 rounded-3xl border-r-4 border-r-emerald-400 space-y-2">
+            <div class="flex justify-between items-start gap-2">
+              <h3 class="text-sm font-bold text-white">${title}</h3>
+              <span class="text-[10px] text-tennis bg-tennis/10 px-2.5 py-1 rounded-xl font-bold shrink-0">${team}</span>
+            </div>
+            <div class="grid grid-cols-2 gap-1.5 text-xs text-gray-300 pt-1">
+              <div><i class="fa-regular fa-calendar text-tennis ml-1"></i> ${day}</div>
+              <div><i class="fa-regular fa-clock text-tennis ml-1"></i> ${time}</div>
+              <div><i class="fa-solid fa-location-dot text-emerald-400 ml-1"></i> ${court}</div>
+              <div><i class="fa-solid fa-user-shield text-emerald-400 ml-1"></i> ${coach}</div>
+            </div>
+            ${noteVal ? `<div class="p-2 rounded-xl bg-white/5 text-[11px] text-tennis">ملاحظة التمرينة: ${noteVal}</div>` : ""}
+            ${canEditSchedule ? `
+              <button onclick='openScheduleEditModal(${JSON.stringify(s).replace(/'/g, "&#39;")})' class="w-full py-2 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-bold text-tennis mt-1">
+                تعديل الموعد / كتابة ملاحظة للتمرينة
+              </button>` : ""}
+          </div>`;
+      }).join("");
+    }
+
+    function openPlayerEditModal(player) {
+      const isSuper = sessionUser.role === "super_admin";
+      document.getElementById("edit-modal-title").innerText = isSuper ? "تعديل بيانات اللاعب" : "ملاحظة المدرب على اللاعب";
+      document.getElementById("edit-modal-fields").innerHTML = `
+        ${isSuper ? `
+          <label class="block text-gray-300">اسم اللاعب</label>
+          <input id="ed-p-name" value="${pick(player, ["Player_Name"])}" class="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-white">
+          <label class="block text-gray-300">إيميل ولي الأمر</label>
+          <input id="ed-p-email" value="${pick(player, ["Parent_Email"])}" class="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-white">
+          <label class="block text-gray-300">رابط الصورة (cover)</label>
+          <input id="ed-p-cover" value="${pick(player, ["cover"])}" class="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-white">
+        ` : ""}
+        <label class="block text-gray-300">ملاحظة المدرب</label>
+        <textarea id="ed-p-note" rows="2" class="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-white">${pick(player, ["Coach_Note", "ملاحظة المدرب"])}</textarea>
+      `;
+
+      document.getElementById("edit-modal-save-btn").onclick = async () => {
+        const body = {
+          action: "updatePlayerNoteOrPhoto",
+          rowIndex: player._rowIndex,
+          coachNote: document.getElementById("ed-p-note").value
+        };
+        if (isSuper) {
+          body.playerName = document.getElementById("ed-p-name").value;
+          body.parentEmail = document.getElementById("ed-p-email").value;
+          body.cover = document.getElementById("ed-p-cover").value;
         }
+        await postAction(body);
+        closeEditModal();
+        fetchLiveSheetData();
+      };
 
-        async function fetchLiveSheetData() {
-            const icon = document.getElementById("sync-icon");
-            if (icon) icon.classList.add("fa-spin");
+      document.getElementById("edit-modal").classList.remove("hidden");
+    }
 
-            try {
-                const res = await fetch(GOOGLE_SCRIPT_URL + "?t=" + Date.now());
-                const json = await res.json();
-                const sheets = json.data || json;
+    function openScheduleEditModal(sched) {
+      document.getElementById("edit-modal-title").innerText = "تعديل موعد التمرين أو الملاحظة";
+      document.getElementById("edit-modal-fields").innerHTML = `
+        <label class="block text-gray-300">عنوان التمرين / الحصة</label>
+        <input id="ed-s-title" value="${pick(sched, ["عنوان التمرين / الحصة"])}" class="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-white">
+        <label class="block text-gray-300">اليوم</label>
+        <input id="ed-s-day" value="${formatDate(pick(sched, ["اليوم"]))}" class="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-white">
+        <label class="block text-gray-300">التوقيت</label>
+        <input id="ed-s-time" value="${formatTime(pick(sched, ["التوقيت"]))}" class="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-white">
+        <label class="block text-gray-300">ملاحظة المدرب عن التمرينة</label>
+        <textarea id="ed-s-note" rows="2" class="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-white">${pick(sched, ["ملاحظة المدرب"])}</textarea>
+      `;
 
-                liveData.teams = sheets["Teams"] || sheets["الفرق"] || [];
-                liveData.players = sheets["Players"] || sheets["اللاعبين"] || sheets["اللاعبون"] || [];
-                liveData.schedules = sheets["Schedules"] || sheets["المواعيد"] || sheets["الجداول"] || [];
-                liveData.education = sheets["Educational_Content"] || sheets["Education"] || sheets["المحتوى التعليمي"] || [];
-                liveData.admin = sheets["Administration"] || sheets["Admin"] || sheets["الإدارة"] || [];
+      document.getElementById("edit-modal-save-btn").onclick = async () => {
+        await postAction({
+          action: "updateSchedule",
+          rowIndex: sched._rowIndex,
+          title: document.getElementById("ed-s-title").value,
+          day: document.getElementById("ed-s-day").value,
+          time: document.getElementById("ed-s-time").value,
+          note: document.getElementById("ed-s-note").value
+        });
+        closeEditModal();
+        fetchLiveSheetData();
+      };
 
-                document.getElementById("dash-player-count").innerText = liveData.players.length;
-                document.getElementById("dash-team-count").innerText = liveData.teams.length;
-                document.getElementById("dash-sched-count").innerText = liveData.schedules.length;
+      document.getElementById("edit-modal").classList.remove("hidden");
+    }
 
-                renderTeams();
-                renderPlayers(liveData.players);
-                renderSchedules();
-                renderEducation();
-                renderAdmin();
-            } catch (err) {
-                console.error("Error fetching sheet data:", err);
-            } finally {
-                if (icon) icon.classList.remove("fa-spin");
-            }
+    function openCoachEmailModal(coach) {
+      document.getElementById("edit-modal-title").innerText = `تغيير إيميل ${pick(coach, ["اسم المدرب"])}`;
+      document.getElementById("edit-modal-fields").innerHTML = `
+        <label class="block text-gray-300">إيميل المدرب الجديد</label>
+        <input id="ed-c-email" type="email" value="${pick(coach, ["ايميل المدرب"])}" class="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-white">
+      `;
+
+      document.getElementById("edit-modal-save-btn").onclick = async () => {
+        await postAction({
+          action: "updateCoachEmail",
+          rowIndex: coach._rowIndex,
+          coachEmail: document.getElementById("ed-c-email").value.trim()
+        });
+        closeEditModal();
+        fetchLiveSheetData();
+      };
+
+      document.getElementById("edit-modal").classList.remove("hidden");
+    }
+
+    function closeEditModal() {
+      document.getElementById("edit-modal").classList.add("hidden");
+    }
+
+    async function postAction(payload) {
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+    }
+
+    function switchTab(tabId) {
+      ["dashboard", "teams", "players", "coaches", "schedules", "admin"].forEach((t) => {
+        const sec = document.getElementById(`tab-${t}`);
+        const btn = document.getElementById(`nav-${t}`);
+        if (t === tabId) {
+          sec.classList.remove("hidden");
+          btn.className = "flex flex-col items-center justify-center w-12 py-1 text-emerald-400";
+          btn.querySelector("div").className = "w-8 h-8 rounded-xl flex items-center justify-center bg-emerald-500/20";
+        } else {
+          sec.classList.add("hidden");
+          btn.className = "flex flex-col items-center justify-center w-12 py-1 text-gray-400";
+          btn.querySelector("div").className = "w-8 h-8 rounded-xl flex items-center justify-center";
         }
+      });
+      document.getElementById("app-content").scrollTop = 0;
+    }
 
-        function renderTeams() {
-            const container = document.getElementById("teams-container");
-            document.getElementById("teams-badge").innerText = `${liveData.teams.length} فرق`;
-            if (!liveData.teams.length) {
-                container.innerHTML = `<div class="glass-card p-6 rounded-3xl text-center text-gray-400 text-xs">جاري تحميل الفرق من الشيت أو لا توجد بيانات...</div>`;
-                return;
-            }
-            container.innerHTML = liveData.teams.map(t => {
-                const name = pick(t, ["اسم الفريق / الفئة", "اسم الفريق", "Team_Name", "Name"]);
-                const sport = pick(t, ["نوع الرياضة", "Sport"]);
-                const coach = pick(t, ["اسم المدرب", "المدرب", "Coach"]);
-                const level = pick(t, ["الفئة العمرية / المستوى", "الفئة العمرية", "Level"]);
-                const id = pick(t, ["معرف الفريق", "Team_ID"]);
-                const cover = pick(t, ["cover", "Cover", "image", "صورة"]);
-                return `
-                <div class="glass-card rounded-3xl overflow-hidden">
-                    ${cover ? `<img src="${cover}" alt="${name}" class="w-full h-36 object-cover">` : ""}
-                    <div class="p-5">
-                        <div class="flex items-center justify-between mb-2">
-                            <h3 class="text-sm font-bold text-white">${name}</h3>
-                            <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded-full border border-emerald-500/30 font-bold">${sport}</span>
-                        </div>
-                        <p class="text-xs text-gray-300 mb-3">${level}</p>
-                        <div class="flex items-center justify-between pt-3 border-t border-white/10 text-xs">
-                            <span class="text-gray-400">المدرب: <strong class="text-white">${coach}</strong></span>
-                            <span class="text-tennis font-bold">${id}</span>
-                        </div>
-                    </div>
-                </div>`;
-            }).join("");
-        }
+    async function handleRegistrationSubmit(event) {
+      event.preventDefault();
+      const btn = document.getElementById("reg-submit-btn");
+      const orig = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري الإرسال...`;
 
-        function renderPlayers(data) {
-            const container = document.getElementById("players-list-container");
-            document.getElementById("player-count-badge").innerText = `${data.length} لاعب`;
-            if (!data.length) {
-                container.innerHTML = `<div class="glass-card p-6 rounded-3xl text-center text-gray-400 text-xs">لا يوجد لاعبون مسجلون في الشيت حالياً</div>`;
-                return;
-            }
-            container.innerHTML = data.map(p => {
-                const name = pick(p, ["Player_Name", "اسم اللاعب", "Name"]);
-                const team = pick(p, ["Team_ID", "معرف الفريق", "الفريق"]);
-                const parent = pick(p, ["Parent_Name", "اسم ولي الأمر", "ولي الأمر"]);
-                const phone = pick(p, ["Parent_Phone", "رقم الهاتف", "Phone"]);
-                const cover = pick(p, ["cover", "Cover", "Photo", "صورة"], "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80");
-                return `
-                <div class="glass-card p-4 rounded-3xl">
-                    <div class="flex items-center gap-3.5">
-                        <img src="${cover}" alt="${name}" class="w-14 h-14 rounded-2xl object-cover border-2 border-emerald-400 shrink-0">
-                        <div class="flex-1 min-w-0">
-                            <div class="flex justify-between items-start">
-                                <h3 class="text-sm font-bold text-white truncate">${name}</h3>
-                                <span class="text-[10px] text-tennis bg-tennis/10 px-2 py-0.5 rounded-lg border border-tennis/30 font-bold">${team}</span>
-                            </div>
-                            <p class="text-[11px] text-gray-300 mt-1">ولي الأمر: ${parent}</p>
-                            <p class="text-[11px] text-emerald-400 mt-0.5">${phone}</p>
-                        </div>
-                    </div>
-                    ${phone ? `
-                    <div class="mt-3 pt-3 border-t border-white/10">
-                        <a href="tel:${phone}" class="w-full py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs font-bold flex items-center justify-center gap-1.5 transition">
-                            <i class="fa-solid fa-phone"></i> اتصال ولي الأمر
-                        </a>
-                    </div>` : ""}
-                </div>`;
-            }).join("");
-        }
+      await postAction({
+        action: "register",
+        childName: document.getElementById("reg-child-name").value,
+        age: document.getElementById("reg-child-age").value,
+        sport: document.getElementById("reg-sport").value,
+        parentName: document.getElementById("reg-parent-name").value,
+        phone: document.getElementById("reg-phone").value,
+        email: document.getElementById("reg-email").value,
+        notes: document.getElementById("reg-notes").value
+      });
 
-        function filterPlayers() {
-            const q = document.getElementById("player-search").value.toLowerCase();
-            const filtered = liveData.players.filter(p => JSON.stringify(p).toLowerCase().includes(q));
-            renderPlayers(filtered);
-        }
+      btn.disabled = false;
+      btn.innerHTML = orig;
+      document.getElementById("new-reg-form").classList.add("hidden");
+      document.getElementById("reg-success-box").classList.remove("hidden");
+    }
 
-        function renderSchedules() {
-            const container = document.getElementById("schedules-container");
-            document.getElementById("schedules-badge").innerText = `${liveData.schedules.length} حصص`;
-            if (!liveData.schedules.length) {
-                container.innerHTML = `<div class="glass-card p-6 rounded-3xl text-center text-gray-400 text-xs">لا توجد حصص مجدولة في الشيت حالياً</div>`;
-                return;
-            }
-            container.innerHTML = liveData.schedules.map(s => {
-                const title = pick(s, ["عنوان التمرين / الحصة", "عنوان التمرين", "Title"]);
-                const team = pick(s, ["معرف الفريق", "Team_ID"]);
-                const day = formatDate(pick(s, ["اليوم", "التاريخ", "Date"]));
-                const time = formatTime(pick(s, ["التوقيت", "الوقت", "Time"]));
-                const court = pick(s, ["الملعب", "Court"]);
-                const coach = pick(s, ["المدرب المسؤول", "المدرب", "Coach"]);
-                return `
-                <div class="glass-card p-4 rounded-3xl border-r-4 border-r-emerald-400">
-                    <div class="flex justify-between items-start gap-2">
-                        <h3 class="text-sm font-bold text-white">${title}</h3>
-                        <span class="text-[10px] text-tennis bg-tennis/10 px-2.5 py-1 rounded-xl border border-tennis/20 font-bold shrink-0">${team}</span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-white/10 text-xs text-gray-300">
-                        <div><i class="fa-regular fa-calendar text-tennis ml-1"></i> ${day}</div>
-                        <div><i class="fa-regular fa-clock text-tennis ml-1"></i> ${time}</div>
-                        <div><i class="fa-solid fa-location-dot text-emerald-400 ml-1"></i> ${court}</div>
-                        <div><i class="fa-solid fa-user-shield text-emerald-400 ml-1"></i> ${coach}</div>
-                    </div>
-                </div>`;
-            }).join("");
-        }
+    function resetRegistrationForm() {
+      document.getElementById("new-reg-form").reset();
+      document.getElementById("new-reg-form").classList.remove("hidden");
+      document.getElementById("reg-success-box").classList.add("hidden");
+    }
 
-        function renderEducation() {
-            const container = document.getElementById("education-container");
-            if (!liveData.education.length) {
-                container.innerHTML = `<div class="glass-card p-6 rounded-3xl text-center text-gray-400 text-xs">لا يوجد محتوى تعليمي في الشيت حالياً</div>`;
-                return;
-            }
-            container.innerHTML = liveData.education.map(e => {
-                const title = pick(e, ["عنوان الدرس", "Title"]);
-                const cat = pick(e, ["نوع الرياضة / التصنيف", "التصنيف", "Category"]);
-                const media = pick(e, ["نوع الوسائط", "الرابط", "Link"]);
-                const target = pick(e, ["الفئة المستهدفة", "Target"]);
-                const cover = pick(e, ["cover", "Cover"]);
-                return `
-                <div class="glass-card rounded-3xl overflow-hidden">
-                    ${cover ? `<img src="${cover}" alt="${title}" class="w-full h-32 object-cover">` : ""}
-                    <div class="p-4">
-                        <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-md font-bold">${cat}</span>
-                        <h3 class="text-sm font-bold text-white mt-1.5">${title}</h3>
-                        <p class="text-[11px] text-gray-300 mt-1">${target} ${media ? `• ${media}` : ""}</p>
-                    </div>
-                </div>`;
-            }).join("");
-        }
-
-        function renderAdmin() {
-            const container = document.getElementById("admin-container");
-            if (!liveData.admin.length) {
-                container.innerHTML = "";
-                return;
-            }
-            container.innerHTML = liveData.admin.map(a => {
-                const name = pick(a, ["المسؤول / القسم", "الاسم", "Name"]);
-                const role = pick(a, ["الدور", "Role"]);
-                const phone = pick(a, ["الهاتف", "Phone"]);
-                const email = pick(a, ["البريد الإلكتروني", "Email"]);
-                const hours = pick(a, ["ساعات العمل", "Hours"]);
-                return `
-                <div class="glass-card p-4 rounded-3xl space-y-2">
-                    <div class="flex justify-between items-center">
-                        <h4 class="text-sm font-bold text-white">${name}</h4>
-                        <span class="text-[10px] text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg">${role}</span>
-                    </div>
-                    ${hours ? `<p class="text-[11px] text-gray-400">${hours}</p>` : ""}
-                    <div class="pt-2 border-t border-white/10 flex items-center justify-between text-xs">
-                        <a href="tel:${phone}" class="text-emerald-400 font-semibold">${phone}</a>
-                        <a href="mailto:${email}" class="text-gray-300">${email}</a>
-                    </div>
-                </div>`;
-            }).join("");
-        }
-
-        function switchTab(tabId) {
-            ['dashboard', 'teams', 'players', 'schedules', 'education', 'admin'].forEach(t => {
-                const sec = document.getElementById(`tab-${t}`);
-                const btn = document.getElementById(`nav-${t}`);
-                if (t === tabId) {
-                    sec.classList.remove('hidden');
-                    btn.className = "flex flex-col items-center justify-center w-12 py-1 text-emerald-400 transition";
-                    btn.querySelector('div').className = "w-9 h-9 rounded-xl flex items-center justify-center bg-emerald-500/20 text-emerald-400 shadow-md";
-                } else {
-                    sec.classList.add('hidden');
-                    btn.className = "flex flex-col items-center justify-center w-12 py-1 text-gray-400 hover:text-white transition";
-                    btn.querySelector('div').className = "w-9 h-9 rounded-xl flex items-center justify-center";
-                }
-            });
-            document.getElementById('app-content').scrollTop = 0;
-        }
-
-        function toggleLanguage() {
-            currentLang = currentLang === 'ar' ? 'en' : 'ar';
-            const html = document.getElementById('app-html');
-            html.setAttribute('dir', currentLang === 'en' ? 'ltr' : 'rtl');
-            html.setAttribute('lang', currentLang);
-            document.getElementById('lang-label').innerText = currentLang === 'en' ? 'AR' : 'EN';
-        }
-
-        async function handleRegistrationSubmit(event) {
-            event.preventDefault();
-            const btn = document.getElementById('reg-submit-btn');
-            const orig = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>جاري الإرسال للشيت...</span>`;
-
-            const payload = {
-                sheetName: "Form Responses",
-                childName: document.getElementById('reg-child-name').value,
-                age: document.getElementById('reg-child-age').value,
-                sport: document.getElementById('reg-sport').value,
-                parentName: document.getElementById('reg-parent-name').value,
-                phone: document.getElementById('reg-phone').value,
-                email: document.getElementById('reg-email').value,
-                notes: document.getElementById('reg-notes').value
-            };
-
-            try {
-                await fetch(GOOGLE_SCRIPT_URL, {
-                    method: "POST",
-                    mode: "no-cors",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify(payload)
-                });
-            } catch (e) {
-                console.error(e);
-            }
-
-            btn.disabled = false;
-            btn.innerHTML = orig;
-            document.getElementById('new-reg-form').classList.add('hidden');
-            document.getElementById('reg-success-box').classList.remove('hidden');
-        }
-
-        function resetRegistrationForm() {
-            document.getElementById('new-reg-form').reset();
-            document.getElementById('new-reg-form').classList.remove('hidden');
-            document.getElementById('reg-success-box').classList.add('hidden');
-        }
-
-        window.onload = fetchLiveSheetData;
-    </script>
+    window.onload = () => {
+      applyRoleUI();
+      fetchLiveSheetData();
+    };
+  </script>
 </body>
 </html>
