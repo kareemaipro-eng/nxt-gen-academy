@@ -181,13 +181,11 @@
             <span class="text-[10px] text-emerald-400 font-bold">Super Admin</span>
           </div>
           <div class="space-y-2 text-xs">
-            <label class="block text-[11px] text-gray-300">إيميل المدير الأعلى الحالي</label>
+            <label class="block text-[11px] text-gray-300">إيميل المدير الأعلى (يُحفظ في Administration)</label>
             <input type="email" id="cfg-admin-email" class="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-xs text-white">
-            <label class="block text-[11px] text-gray-300">رقم PIN للمدير الأعلى</label>
+            <label class="block text-[11px] text-gray-300">كود الإدارة العليا (code)</label>
             <input type="text" id="cfg-admin-pin" class="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-xs text-white">
-            <label class="block text-[11px] text-gray-300">رقم PIN للمدربين</label>
-            <input type="text" id="cfg-coach-pin" class="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-xs text-white">
-            <button onclick="saveRoleSettings()" class="w-full py-2.5 rounded-xl bg-tennis text-gray-950 font-extrabold text-xs mt-1">حفظ إعدادات الصلاحيات</button>
+            <button onclick="saveRoleSettings()" class="w-full py-2.5 rounded-xl bg-tennis text-gray-950 font-extrabold text-xs mt-1">حفظ في Google Sheets (Administration)</button>
           </div>
         </div>
 
@@ -282,7 +280,7 @@
 
         <p class="text-[11px] text-gray-300 leading-relaxed">
           • <b>ولي الأمر:</b> أدخل إيميلك المسجل في `Parent_Email` لرؤية بيانات اللاعب الخاص بك فقط.<br>
-          • <b>المدرب / المدير الأعلى:</b> أدخل إيميلك ورقم الـ PIN.
+          • <b>المدرب / المدير الأعلى:</b> أدخل إيميلك وكود الدخول من الشيت.
         </p>
 
         <div>
@@ -291,8 +289,8 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-gray-200 mb-1">رقم PIN (للمدير والمدرب فقط)</label>
-          <input type="password" id="login-pin" placeholder="مثال: 1234" class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white">
+          <label class="block text-xs font-bold text-gray-200 mb-1">كود الدخول (للمدرب والإدارة فقط)</label>
+          <input type="password" id="login-pin" placeholder="مثال: 1234 أو 2026" class="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white">
         </div>
 
         <p id="login-error" class="text-[11px] text-red-400 hidden"></p>
@@ -324,7 +322,7 @@
     const DEFAULT_SECURITY = {
       superAdminEmail: "kareem.aipro@gmail.com",
       superAdminPin: "2026",
-      coachPin: "1111"
+      adminRowIndex: 2
     };
 
     function getSecurityConfig() {
@@ -361,11 +359,15 @@
     function syncSuperAdminFromSheet(adminRows) {
       if (!Array.isArray(adminRows) || !adminRows.length) return;
       const cfg = getSecurityConfig();
-      const first = adminRows[0];
-      const sheetEmail = String(pick(first, ["البريد الإلكتروني", "Email", "ايميل المدير"], "")).trim();
-      const sheetPin = String(pick(first, ["PIN", "pin", "الرقم السري"], "")).trim();
+      const topRow =
+        adminRows.find((r) => String(pick(r, ["ID", "id"], "")).trim() === "ADM-01") || adminRows[0];
+
+      const sheetEmail = String(pick(topRow, ["البريد الإلكتروني", "Email"], "")).trim();
+      const sheetCode = String(pick(topRow, ["code", "Code", "PIN"], "")).trim();
+
+      if (topRow._rowIndex) cfg.adminRowIndex = topRow._rowIndex;
+      if (sheetCode) cfg.superAdminPin = sheetCode;
       if (sheetEmail) cfg.superAdminEmail = sheetEmail;
-      if (sheetPin) cfg.superAdminPin = sheetPin;
       localStorage.setItem("nxt_sec_cfg", JSON.stringify(cfg));
     }
 
@@ -402,7 +404,6 @@
 
       document.getElementById("cfg-admin-email").value = cfg.superAdminEmail;
       document.getElementById("cfg-admin-pin").value = cfg.superAdminPin;
-      document.getElementById("cfg-coach-pin").value = cfg.coachPin;
 
       if (sessionUser.role === "super_admin") {
         badge.innerText = "المدير الأعلى (صلاحية كاملة)";
@@ -446,9 +447,21 @@
         return;
       }
 
-      if (email === cfg.superAdminEmail.toLowerCase()) {
-        if (pin !== cfg.superAdminPin) {
-          errEl.innerText = "رقم PIN الخاص بالمدير الأعلى غير صحيح.";
+      const sheetAdminMatch = liveData.admin.find(
+        (a) => String(pick(a, ["البريد الإلكتروني", "Email"], "")).trim().toLowerCase() === email
+      );
+      const isSuperAdminEmail =
+        email === cfg.superAdminEmail.toLowerCase() ||
+        email === "kareem.aipro@gmail.com" ||
+        Boolean(sheetAdminMatch);
+
+      if (isSuperAdminEmail) {
+        const expectedPin = sheetAdminMatch
+          ? String(pick(sheetAdminMatch, ["code", "Code"], cfg.superAdminPin)).trim()
+          : cfg.superAdminPin;
+
+        if (pin !== expectedPin) {
+          errEl.innerText = "كود الإدارة العليا (code) غير صحيح.";
           errEl.classList.remove("hidden");
           return;
         }
@@ -463,8 +476,9 @@
         (c) => String(pick(c, ["ايميل المدرب", "Email", "email"], "")).trim().toLowerCase() === email
       );
       if (matchedCoach) {
-        if (pin !== cfg.coachPin) {
-          errEl.innerText = "رقم PIN الخاص بالمدرب غير صحيح.";
+        const coachCode = String(pick(matchedCoach, ["login code", "Login Code", "code"], "")).trim();
+        if (!coachCode || pin !== coachCode) {
+          errEl.innerText = "كود الدخول (login code) الخاص بالمدرب غير صحيح.";
           errEl.classList.remove("hidden");
           return;
         }
@@ -490,7 +504,7 @@
         return;
       }
 
-      errEl.innerText = "هذا الإيميل غير مسجل كولي أمر أو مدرب أو مدير أعلى.";
+      errEl.innerText = "هذا الإيميل غير مسجل في قاعدة بيانات الشيت.";
       errEl.classList.remove("hidden");
     }
 
@@ -501,15 +515,25 @@
       closeAuthModal();
     }
 
-    function saveRoleSettings() {
-      const cfg = {
-        superAdminEmail: document.getElementById("cfg-admin-email").value.trim() || DEFAULT_SECURITY.superAdminEmail,
-        superAdminPin: document.getElementById("cfg-admin-pin").value.trim() || DEFAULT_SECURITY.superAdminPin,
-        coachPin: document.getElementById("cfg-coach-pin").value.trim() || DEFAULT_SECURITY.coachPin
-      };
+    async function saveRoleSettings() {
+      const cfg = getSecurityConfig();
+      const newEmail = document.getElementById("cfg-admin-email").value.trim();
+      const newCode = document.getElementById("cfg-admin-pin").value.trim();
+
+      if (newEmail) cfg.superAdminEmail = newEmail;
+      if (newCode) cfg.superAdminPin = newCode;
       localStorage.setItem("nxt_sec_cfg", JSON.stringify(cfg));
+
+      await postAction({
+        action: "updateSuperAdmin",
+        rowIndex: cfg.adminRowIndex || 2,
+        adminEmail: cfg.superAdminEmail,
+        adminCode: cfg.superAdminPin
+      });
+
       applyRoleUI();
-      alert("تم حفظ إعدادات المدير الأعلى ورقم الـ PIN بنجاح.");
+      alert("تم تحديث بيانات الإدارة العليا وحفظها في شيت Administration.");
+      fetchLiveSheetData();
     }
 
     function getVisiblePlayers() {
